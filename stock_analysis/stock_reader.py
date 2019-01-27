@@ -70,7 +70,8 @@ class StockReader:
         for given date range.
 
         Parameter:
-            - index: String representing the index you want data for, supported indices:
+            - index: String representing the index you want data for,
+                     supported indices:
                         - 'SP500' for S&P 500,
                         - 'DOW' for Dow Jones Industrial Average,
                         - 'NASDAQ' for NASDAQ Composite Index
