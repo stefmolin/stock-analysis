@@ -26,8 +26,9 @@ class StockReader:
             A StockReader object.
         """
         self.start, self.end = map(
-            lambda x: x.strftime('%Y%m%d') if isinstance(x, datetime.date) \
-            else re.sub(r'\D', '', x),
+            lambda x: x.strftime('%Y%m%d') if isinstance(
+                x, datetime.date
+            ) else re.sub(r'\D', '', x),
             [start, end or datetime.date.today()]
         )
 
@@ -79,14 +80,15 @@ class StockReader:
         """
         try:
             index = index.upper()
-            if index == 'SP500':
-                ticker = '^GSPC'
-            elif index == 'NASDAQ':
-                ticker = '^IXIC'
-            elif index == 'DOW':
-                ticker = '^DJI'
-            else:
-                raise ValueError('Index not supported.')
-            return web.get_data_yahoo(ticker, self.start, self.end)
         except:
             raise ValueError('`index` must be a string')
+
+        if index == 'SP500':
+            ticker = '^GSPC'
+        elif index == 'NASDAQ':
+            ticker = '^IXIC'
+        elif index == 'DOW':
+            ticker = '^DJI'
+        else:
+            raise ValueError('Index not supported.')
+        return web.get_data_yahoo(ticker, self.start, self.end)
