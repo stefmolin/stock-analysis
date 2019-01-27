@@ -63,12 +63,30 @@ class StockReader:
         )[0]
 
     @label_sanitizer
-    def get_sp500_data(self):
+    def get_index_data(self, index='SP500'):
         """
-        Get historical OHLC data from Yahoo Finance for the S&P 500 Index
+        Get historical OHLC data from Yahoo Finance for the chosen index
         for given date range.
+
+        Parameter:
+            - index: String representing the index you want data for, supported indices:
+                        - 'SP500' for S&P 500,
+                        - 'DOW' for Dow Jones Industrial Average,
+                        - 'NASDAQ' for NASDAQ Composite Index
 
         Returns:
             A pandas dataframe with the S&P 500 index data.
         """
-        return web.get_data_yahoo('^GSPC', self.start, self.end)
+        try:
+            index = index.upper()
+            if index == 'SP500':
+                ticker = '^GSPC'
+            elif index == 'NASDAQ':
+                ticker = '^IXIC'
+            elif index == 'DOW':
+                ticker = '^DJI'
+            else:
+                raise ValueError('Index not supported.')
+            return web.get_data_yahoo(ticker, self.start, self.end)
+        except:
+            raise ValueError('`index` must be a string')
