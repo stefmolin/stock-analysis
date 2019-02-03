@@ -408,7 +408,10 @@ class AssetGroupVisualizer(Visualizer):
         Returns:
             A matplotlib Axes object.
         """
-        fig, ax = plt.subplots(1, 1, figsize=(10, 4))
+        if 'ax' not in kwargs:
+            fig, ax = plt.subplots(1, 1, figsize=(10, 4))
+        else:
+            ax = kwargs.pop('ax')
         return sns.lineplot(
             x=self.data.index,
             y=column,
