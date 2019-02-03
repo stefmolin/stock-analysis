@@ -76,7 +76,9 @@ class StockReader:
         Returns:
             A pandas dataframe with the stock data.
         """
-        return web.DataReader(ticker, 'iex', self.start, self.end)
+        data = web.DataReader(ticker, 'iex', self.start, self.end)
+        data.index = pd.to_datetime(data.index)
+        return data
 
     @label_sanitizer
     def get_bitcoin_data(self):
@@ -93,7 +95,7 @@ class StockReader:
             ),
             parse_dates=True,
             index_col='Date'
-        )[0]
+        )[0].sort_index()
 
     @label_sanitizer
     def get_index_data(self, index='SP500'):
