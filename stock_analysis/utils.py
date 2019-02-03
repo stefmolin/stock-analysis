@@ -3,6 +3,8 @@
 from functools import wraps
 import re
 
+import pandas as pd
+
 def _sanitize_label(label):
     """
     Clean up a label by removing non-letter, non-space characters and
@@ -48,3 +50,37 @@ def label_sanitizer(method, *args, **kwargs):
         )
         return df
     return method_wrapper
+
+def group_stocks(mapping):
+    """
+    Create a new dataframe with many assets and a new column indicating
+    the asset that row's data belongs to.
+
+    Parameters:
+        - mapping: A key-value mapping of the form { asset_name : asset_df }
+
+    Returns:
+        A new pandas DataFrame
+    """
+    group_df = pd.DataFrame()
+
+    for stock, stock_data in mapping.items():
+        df = stock_data.copy(deep=True)
+        df['name'] = stock
+        group_df = group_df.append(df, sort=True)
+
+    group_df.index = pd.to_datetime(group_df.index)
+
+    return group_df
+
+def describe_group(data):
+    """
+    Run `describe()` on the asset group created with `group_stocks()`.
+
+    Parameters:
+        - data: The group data resulting from `group_stocks()`
+
+    Returns:
+        The transpose of the grouped description statistics.
+    """
+    return data.groupby('name').describe().T
