@@ -1,5 +1,7 @@
 """Visualize financial instruments."""
 
+import math
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -547,7 +549,7 @@ class AssetGroupVisualizer(Visualizer):
 
     def pairplot(self, **kwargs):
         """
-        Generate a seaborn pairplot for this asset.
+        Generate a seaborn pairplot for this asset group.
 
         Parameters:
             - kwargs: Keyword arguments to pass down to `sns.pairplot()`
@@ -555,4 +557,30 @@ class AssetGroupVisualizer(Visualizer):
         Returns:
             A seaborn pairplot
         """
-        return sns.pairplot(self.data, hue=self.group_by, **kwargs)
+        return sns.pairplot(
+            self.data.pivot_table(
+                values='close', index=self.data.index, columns='name'
+            ),
+            diag_kind='kde',
+            **kwargs
+        )
+
+    def heatmap(self, pct_change=False, **kwargs):
+        """
+        Generate a seaborn heatmap for correlations between assets.
+
+        Parameters:
+            - pct_change: Whether or not to show the correlations of the
+                          daily percent change in price or just use
+                          the closing price.
+            - kwargs: Keyword arguments to pass down to `sns.heatmap()`
+
+        Returns:
+            A seaborn heatmap
+        """
+        pivot = self.data.pivot_table(
+            values='close', index=self.data.index, columns='name'
+        )
+        if pct_change:
+            pivot = pivot.pct_change()
+        return sns.heatmap(pivot.corr(), annot=True, center=0, **kwargs)
