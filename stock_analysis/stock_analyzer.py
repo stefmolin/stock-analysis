@@ -165,17 +165,18 @@ class StockAnalyzer:
         start, end = df.close[0], df.close[-1]
         return (end - start) / start
 
-    def alpha(self, index, r_f=0.0246):
+    def alpha(self, index, r_f=2.46):
         """
         Calculates the asset's alpha.
 
         Parameters:
             - index: The index to compare to.
-            - r_f: The risk-free rate of return as a decimal.
+            - r_f: The risk-free rate of return.
 
         Returns:
             Alpha, as a float.
         """
+        r_f /= 100
         r_m = self.port_return(index)
         beta = self.beta(index)
         r = self.port_return(self.data)
