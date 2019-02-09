@@ -93,8 +93,8 @@ class StockReader:
             'start={}&end={}'.format(
                 self.start, self.end
             ),
-            parse_dates=True,
-            index_col='Date'
+            parse_dates=[0],
+            index_col=[0]
         )[0].sort_index()
 
     @label_sanitizer
