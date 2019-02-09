@@ -95,7 +95,7 @@ class StockAnalyzer:
         """Calculate the annualized volatility."""
         return self.daily_std() * math.sqrt(252)
 
-    def volatility(self, periods):
+    def volatility(self, periods=252):
         """
         Calculate the rolling volatility.
 
@@ -147,8 +147,8 @@ class StockAnalyzer:
         beta = self.pct_change.cov(index_change) / index_change.var()
         return beta
 
-    def cummulative_returns(self):
-        """Calculate the series of cummulative returns for plotting."""
+    def cumulative_returns(self):
+        """Calculate the series of cumulative returns for plotting."""
         return (1 + self.pct_change).cumprod()
 
     @staticmethod
@@ -190,6 +190,13 @@ class StockAnalyzer:
         """
         return self.port_return(self.data.last('2M')) <= -.2
 
+    def is_bull_market(self):
+        """
+        Determine if a stock is in a bull market, meaning its
+        return in the last 2 months is a increase of 20% or more.
+        """
+        return self.port_return(self.data.last('2M')) >= .2
+
     def sharpe_ratio(self, r_f=2.46):
         """
         Calculates the asset's sharpe ratio.
@@ -201,8 +208,8 @@ class StockAnalyzer:
             The sharpe ratio, as a float.
         """
         return (
-            self.cummulative_returns().last('1D').iat[0] - r_f
-        ) / self.cummulative_returns().std()
+            self.cumulative_returns().last('1D').iat[0] - r_f
+        ) / self.cumulative_returns().std()
 
 class AssetGroupAnalyzer:
     """Analyzes many assets in a dataframe."""
@@ -222,18 +229,21 @@ class AssetGroupAnalyzer:
             for group, data in self.data.groupby(self.group_by)
         }
 
-    def analyze(self, func_name):
+    def analyze(self, func_name, **kwargs):
         """
         Run a StockAnalyzer method on all assets in the group.
 
         Parameters:
             - func_name: The name of the method to run.
+            - kwargs: Additional keyword arguments to pass to the function.
 
         Returns:
             A dictionary mapping each asset to the result of the
             calculation of that function.
         """
+        if not kwargs:
+            kwargs = {}
         return {
-            group : getattr(StockAnalyzer, func_name)(analyzer) \
+            group : getattr(StockAnalyzer, func_name)(analyzer, **kwargs) \
             for group, analyzer in self.analyzers.items()
         }
