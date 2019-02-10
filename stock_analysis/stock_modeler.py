@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from statsmodels.tsa.arima_model import ARIMA
 from statsmodels.tsa.seasonal import seasonal_decompose
+import statsmodels.api as sm
 
 class StockModeler:
     """Static methods for modeling stocks."""
@@ -102,6 +103,61 @@ class StockModeler:
 
         if plot:
             ax = df.close.plot()
-            predictions.plot(ax=ax, style='r:')
+            predictions.plot(ax=ax, style='r:', label='arima predictions')
+            ax.legend()
+
+        return ax if plot else predictions
+
+    @staticmethod
+    def regression(df):
+        """
+        Create linear regression of time series data with a lag of 1.
+
+        Parameters:
+            - df: The dataframe with the stock data.
+
+        Returns:
+            X, Y, and the fitted statsmodels linear regression
+        """
+        X = df.close.shift().dropna()
+        Y = df.close[1:]
+        return X, Y, sm.OLS(Y, X).fit()
+
+    @staticmethod
+    def regression_predictions(model, start, end, df, plot=True):
+        """
+        Get linear regression predictions as pandas Series or plot.
+
+        Parameters:
+            - model: The fitted linear regression model.
+            - start: The start date for the predictions.
+            - end: The end date for the predictions.
+            - df: The dataframe for the stock.
+            - plot: Whether or not to plot the result, default is
+                    True meaning the plot is returned instead of the
+                    pandas Series containing the predictions.
+
+        Returns:
+            A matplotlib Axes object or predictions as a Series
+            depending on the value of the `plot` argument.
+        """
+        predictions = pd.Series(
+            index=pd.date_range(start, end),
+            name='close'
+        )
+        last = df.last('1D').close
+        for i, date in enumerate(predictions.index):
+            if i == 0:
+                pred = model.predict(last)
+            else:
+                pred = model.predict(predictions.iloc[i-1])
+            predictions.loc[date] = pred[0]
+
+        if plot:
+            ax = df.close.plot()
+            predictions.plot(
+                ax=ax, style='r:', label='regression predictions'
+            )
+            ax.legend()
 
         return ax if plot else predictions
