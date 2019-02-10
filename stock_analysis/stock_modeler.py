@@ -55,26 +55,6 @@ class StockModeler:
         return arima_model.fit() if fit else arima_model
 
     @staticmethod
-    def arima_residuals(arima_model_fitted):
-        """
-        Visualize the residuals from the model.
-
-        Parameters:
-            - arima_model_fitted: The fitted ARIMA model
-
-        Returns:
-            A matplotlib figure object.
-        """
-        fig, axes = plt.subplots(1, 2, figsize=(15, 5))
-        residuals = pd.Series(
-            arima_model_fitted.resid, name='residuals'
-        )
-        residuals.plot(style='bo', ax=axes[0], title='Residuals')
-        residuals.plot(kind='kde', ax=axes[1], title='Residuals KDE')
-        plt.close()
-        return fig
-
-    @staticmethod
     def arima_predictions(arima_model_fitted, start, end, df, plot=True, **kwargs):
         """
         Get ARIMA predictions as pandas Series or plot.
@@ -165,3 +145,23 @@ class StockModeler:
             ax.legend()
 
         return ax if plot else predictions
+
+    @staticmethod
+    def plot_residuals(model_fitted):
+        """
+        Visualize the residuals from the model.
+
+        Parameters:
+            - model_fitted: The fitted model
+
+        Returns:
+            A matplotlib figure object.
+        """
+        fig, axes = plt.subplots(1, 2, figsize=(15, 5))
+        residuals = pd.Series(
+            model_fitted.resid, name='residuals'
+        )
+        residuals.plot(style='bo', ax=axes[0], title='Residuals')
+        residuals.plot(kind='kde', ax=axes[1], title='Residuals KDE')
+        plt.close()
+        return fig
