@@ -75,7 +75,7 @@ class StockModeler:
         return fig
 
     @staticmethod
-    def arima_predictions(arima_model_fitted, start, end, df, plot=True):
+    def arima_predictions(arima_model_fitted, start, end, df, plot=True, **kwargs):
         """
         Get ARIMA predictions as pandas Series or plot.
 
@@ -87,6 +87,8 @@ class StockModeler:
             - plot: Whether or not to plot the result, default is
                     True meaning the plot is returned instead of the
                     pandas Series containing the predictions.
+            - kwargs: Additional keyword arguments to pass to the pandas
+                      `plot()` method.
 
         Returns:
             A matplotlib Axes object or predictions as a Series
@@ -102,7 +104,7 @@ class StockModeler:
         ).cumsum() + df.last('1D').close.iat[0]
 
         if plot:
-            ax = df.close.plot()
+            ax = df.close.plot(**kwargs)
             predictions.plot(ax=ax, style='r:', label='arima predictions')
             ax.legend()
 
@@ -124,7 +126,7 @@ class StockModeler:
         return X, Y, sm.OLS(Y, X).fit()
 
     @staticmethod
-    def regression_predictions(model, start, end, df, plot=True):
+    def regression_predictions(model, start, end, df, plot=True, **kwargs):
         """
         Get linear regression predictions as pandas Series or plot.
 
@@ -136,6 +138,8 @@ class StockModeler:
             - plot: Whether or not to plot the result, default is
                     True meaning the plot is returned instead of the
                     pandas Series containing the predictions.
+            - kwargs: Additional keyword arguments to pass to the pandas
+                      `plot()` method.
 
         Returns:
             A matplotlib Axes object or predictions as a Series
@@ -154,7 +158,7 @@ class StockModeler:
             predictions.loc[date] = pred[0]
 
         if plot:
-            ax = df.close.plot()
+            ax = df.close.plot(**kwargs)
             predictions.plot(
                 ax=ax, style='r:', label='regression predictions'
             )
