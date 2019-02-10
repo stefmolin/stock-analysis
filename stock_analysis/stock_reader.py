@@ -76,8 +76,13 @@ class StockReader:
         Returns:
             A pandas dataframe with the stock data.
         """
-        data = web.DataReader(ticker, 'iex', self.start, self.end)
-        data.index = pd.to_datetime(data.index)
+        try:
+            data = web.DataReader(ticker, 'iex', self.start, self.end)
+            data.index = pd.to_datetime(data.index)
+        except:
+            data = web.get_data_yahoo(
+                ticker, self.start, self.end
+            )
         return data
 
     @label_sanitizer
