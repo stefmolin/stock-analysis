@@ -1,4 +1,3 @@
 .ipynb_checkpoints
-*.png
 */__pycache__/
 *.egg-info
