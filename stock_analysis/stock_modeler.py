@@ -12,7 +12,7 @@ class StockModeler:
     def __init__(self):
         raise NotImplementedError(
             "This class is to be used statically, don't instanstiate it!"
-            )
+        )
 
     @staticmethod
     def decompose(df, freq, model='additive'):
