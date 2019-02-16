@@ -67,8 +67,9 @@ class StockReader:
     @label_sanitizer
     def get_ticker_data(self, ticker):
         """
-        Get historical OHLC data from Investors Exchange (IEX)
-        for given date range and ticker.
+        Get historical OHLC data for given date range and ticker.
+        Tries to get from Investors Exchange (IEX), but falls back
+        to Yahoo! Finance.
 
         Parameter:
             - ticker: The stock symbol to lookup as a string.
