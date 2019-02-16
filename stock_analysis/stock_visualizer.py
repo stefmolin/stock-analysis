@@ -21,31 +21,39 @@ class Visualizer:
 
         Parameters:
             - ax: The matplotlib Axes object to add the reference line to.
-            - x, y: The x, y value to draw the line at.
+            - x, y: The x, y value to draw the line at as a
+                    single value or numpy array-like structure.
                         - For horizontal: pass only `y`
                         - For vertical: pass only `x`
                         - For AB line: pass both `x` and `y`
                         for all coordinates on the line
-            - kwargs: Additional keyword arguments to pass to the plotting function.
+            - kwargs: Additional keyword arguments to pass to the plotting
+                      function.
 
         Returns:
             The Axes object passed in.
         """
         try:
-            # in case an numpy array-like structure is passed
-            x_size = x.shape
-            y_size = y.shape
-            # AB line
-            ax.plot(x, y, **kwargs)
+            # in case numpy array-like structures are passed -> AB line
+            if x.shape and y.shape:
+                ax.plot(x, y, **kwargs)
         except:
-            if not x and not y:
-                raise ValueError('You must provide an x or a y at a minimum!')
-            elif x and not y:
-                # vertical line
-                ax.axvline(x, **kwargs)
-            elif not x and y:
-                # horizontal line
-                ax.axhline(y, **kwargs)
+            # error triggers if at least one isn't a numpy array-like structure
+            try:
+                if not x and not y:
+                    raise ValueError(
+                        'You must provide an `x` or a `y` at a minimum!'
+                    )
+                elif x and not y:
+                    # vertical line
+                    ax.axvline(x, **kwargs)
+                elif not x and y:
+                    # horizontal line
+                    ax.axhline(y, **kwargs)
+            except:
+                raise ValueError(
+                    'If providing only `x` or `y`, it must be a single value'
+                )
         ax.legend()
         return ax
 
@@ -60,7 +68,8 @@ class Visualizer:
                  drawn vertically.
             - y: Tuple with the `ymin` and `ymax` bounds for the rectangle
                  drawn vertically.
-            - kwargs: Additional keyword arguments to pass to the plotting function.
+            - kwargs: Additional keyword arguments to pass to the plotting 
+                      function.
 
         Returns:
             The Axes object passed in.
