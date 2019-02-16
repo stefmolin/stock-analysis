@@ -69,7 +69,7 @@ class StockReader:
         """
         Get historical OHLC data for given date range and ticker.
         Tries to get from Investors Exchange (IEX), but falls back
-        to Yahoo! Finance.
+        to Yahoo! Finance if IEX doesn't have it.
 
         Parameter:
             - ticker: The stock symbol to lookup as a string.
@@ -106,7 +106,7 @@ class StockReader:
     @label_sanitizer
     def get_index_data(self, index='SP500'):
         """
-        Get historical OHLC data from Yahoo Finance for the chosen index
+        Get historical OHLC data from Yahoo! Finance for the chosen index
         for given date range.
 
         Parameter:
