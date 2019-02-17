@@ -4,7 +4,7 @@ Package for making elements of technical analysis of a stock easier. This packag
 ## Setup
 ```
 # should install requirements.txt packages
-pip install -e stock_analysis # path to top level where setup.py is
+pip install -e stock-analysis # path to top level where setup.py is
 
 # if not, install them explicitly
 pip install -r requirements.txt
