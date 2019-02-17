@@ -33,7 +33,7 @@ class StockModeler:
         return seasonal_decompose(df.close, model=model, freq=freq)
 
     @staticmethod
-    def arima(df, ar, i, ma, fit=True):
+    def arima(df, *, ar, i, ma, fit=True):
         """
         Create an ARIMA object for modeling time series.
 
