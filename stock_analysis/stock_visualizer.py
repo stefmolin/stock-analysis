@@ -81,10 +81,10 @@ class Visualizer:
         elif x and y:
             raise ValueError('You can only provide `x` or `y`.')
         elif x and not y:
-            # vertical line
+            # vertical span
             ax.axvspan(*x, **kwargs)
         elif not x and y:
-            # horizontal line
+            # horizontal span
             ax.axhspan(*y, **kwargs)
         return ax
 
