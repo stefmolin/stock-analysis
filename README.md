@@ -50,6 +50,14 @@ faang = group_stocks(
 describe_group(faang)
 ```
 
+### Building a portfolio
+Groups assets by date and sums columns to build a portfolio.
+```
+from stock_analysis.utils import make_portfolio
+
+faang_portfolio = make_portfolio(faang)
+```
+
 ### Visualizing data
 Be sure to check out the other methods here for different plot types, reference lines, shaded regions, and more!
 

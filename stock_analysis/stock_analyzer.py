@@ -2,11 +2,20 @@
 
 import math
 
+from .utils import validate_df
+
 class StockAnalyzer:
     """Class for providing metrics for technical analysis of a stock."""
 
+    @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df):
+        """Create a StockAnalyzer by passing in a pandas DataFrame of OHLC data."""
         self.data = df
+
+    @property
+    def _max_periods(self):
+        """Get the maximum number of trading periods that can be used in calculations."""
+        return self.data.shape[0]
 
     @property
     def close(self):
@@ -85,11 +94,14 @@ class StockAnalyzer:
         Parameters:
             - periods: The number of periods to use for the calculation;
                        default is 252 for the trading days in a year.
+                       Note if you provide a number greater than the number
+                       of trading periods in the data, the number of periods
+                       in the data will be used instead.
 
         Returns:
             The standard deviation
         """
-        return self.pct_change[periods * -1:].std()
+        return self.pct_change[min(periods, self._max_periods) * -1:].std()
 
     def annualized_volatility(self):
         """Calculate the annualized volatility."""
@@ -102,10 +114,14 @@ class StockAnalyzer:
         Parameters:
             - periods: The number of periods to use for the calculation;
                        default is 252 for the trading days in a year.
+                       Note if you provide a number greater than the number
+                       of trading periods in the data, the number of periods
+                       in the data will be used instead.
 
         Returns:
             A pandas series.
         """
+        periods = min(periods, self._max_periods)
         return self.close.rolling(periods).std() / math.sqrt(periods)
 
     def corr_with(self, other):
@@ -214,8 +230,15 @@ class StockAnalyzer:
 class AssetGroupAnalyzer:
     """Analyzes many assets in a dataframe."""
 
+    @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df, group_by='name'):
+        """
+        Create a AssetGroupAnalyzer by passing in a pandas DataFrame
+        and column to group by.
+        """
         self.data = df
+        if group_by not in self.data.columns:
+            raise ValueError(f'`group_by` column "{group_by}" not in dataframe.')
         self.group_by = group_by
         self.analyzers = self._composition_handler()
 
@@ -241,6 +264,8 @@ class AssetGroupAnalyzer:
             A dictionary mapping each asset to the result of the
             calculation of that function.
         """
+        if not hasattr(StockAnalyzer, func_name):
+            raise ValueError(f'StockAnalyzer has no "{func_name}" method.')
         if not kwargs:
             kwargs = {}
         return {

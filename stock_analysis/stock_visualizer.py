@@ -7,9 +7,12 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 
+from .utils import validate_df
+
 class Visualizer:
     """Base visualizer class not intended for direct use."""
 
+    @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df):
         """Visualizer has a pandas dataframe as an attribute."""
         self.data = df
@@ -68,7 +71,7 @@ class Visualizer:
                  drawn vertically.
             - y: Tuple with the `ymin` and `ymax` bounds for the rectangle
                  drawn vertically.
-            - kwargs: Additional keyword arguments to pass to the plotting 
+            - kwargs: Additional keyword arguments to pass to the plotting
                       function.
 
         Returns:
@@ -262,7 +265,7 @@ class StockVisualizer(Visualizer):
             title='After hours trading monthly effect',
             color=np.where(monthly_effect >= 0, 'g', 'r'),
             rot=90
-        )
+        ).axhline(0, color='black', linewidth=1)
         plt.close()
         return fig
 
@@ -552,7 +555,7 @@ class AssetGroupVisualizer(Visualizer):
                 title=f'{name} after hours trading monthly effect',
                 color=np.where(monthly_effect >= 0, 'g', 'r'),
                 rot=90
-            )
+            ).axhline(0, color='black', linewidth=1)
         plt.close()
         return fig
 

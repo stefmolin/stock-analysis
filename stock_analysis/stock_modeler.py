@@ -6,6 +6,8 @@ from statsmodels.tsa.arima_model import ARIMA
 from statsmodels.tsa.seasonal import seasonal_decompose
 import statsmodels.api as sm
 
+from .utils import validate_df
+
 class StockModeler:
     """Static methods for modeling stocks."""
 
@@ -15,6 +17,7 @@ class StockModeler:
         )
 
     @staticmethod
+    @validate_df(columns={'close'}, instance_method=False)
     def decompose(df, freq, model='additive'):
         """
         Decompose the closing price of the stock into trend, seasonal,
@@ -33,6 +36,7 @@ class StockModeler:
         return seasonal_decompose(df.close, model=model, freq=freq)
 
     @staticmethod
+    @validate_df(columns={'close'}, instance_method=False)
     def arima(df, *, ar, i, ma, fit=True):
         """
         Create an ARIMA object for modeling time series.
@@ -55,15 +59,16 @@ class StockModeler:
         return arima_model.fit() if fit else arima_model
 
     @staticmethod
-    def arima_predictions(arima_model_fitted, start, end, df, plot=True, **kwargs):
+    @validate_df(columns={'close'}, instance_method=False)
+    def arima_predictions(df, arima_model_fitted, start, end, plot=True, **kwargs):
         """
         Get ARIMA predictions as pandas Series or plot.
 
         Parameters:
+            - df: The dataframe for the stock.
             - arima_model_fitted: The fitted ARIMA model.
             - start: The start date for the predictions.
             - end: The end date for the predictions.
-            - df: The dataframe for the stock.
             - plot: Whether or not to plot the result, default is
                     True meaning the plot is returned instead of the
                     pandas Series containing the predictions.
@@ -91,6 +96,7 @@ class StockModeler:
         return ax if plot else predictions
 
     @staticmethod
+    @validate_df(columns={'close'}, instance_method=False)
     def regression(df):
         """
         Create linear regression of time series data with a lag of 1.
@@ -106,15 +112,16 @@ class StockModeler:
         return X, Y, sm.OLS(Y, X).fit()
 
     @staticmethod
-    def regression_predictions(model, start, end, df, plot=True, **kwargs):
+    @validate_df(columns={'close'}, instance_method=False)
+    def regression_predictions(df, model, start, end, plot=True, **kwargs):
         """
         Get linear regression predictions as pandas Series or plot.
 
         Parameters:
+            - df: The dataframe for the stock.
             - model: The fitted linear regression model.
             - start: The start date for the predictions.
             - end: The end date for the predictions.
-            - df: The dataframe for the stock.
             - plot: Whether or not to plot the result, default is
                     True meaning the plot is returned instead of the
                     pandas Series containing the predictions.

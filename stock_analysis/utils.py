@@ -26,12 +26,12 @@ def label_sanitizer(method, *args, **kwargs):
     putting in all lowercase with underscores replacing spaces.
 
     Parameters:
-        - method: The dataframe with labels you want to fix.
+        - method: The method to wrap.
         - args: Additional positional arguments to pass to the wrapped method.
         - kwargs: Additional keyword arguments to pass to the wrapped method.
 
     Returns:
-        A decorated method.
+        A decorated method or function.
     """
     # keep the docstring of the data method for help()
     @wraps(method)
@@ -49,6 +49,41 @@ def label_sanitizer(method, *args, **kwargs):
             inplace=True
         )
         return df
+    return method_wrapper
+
+def validate_df(columns, instance_method=True, *args, **kwargs):
+    """
+    Decorator that raises a ValueError if input isn't a pandas
+    DataFrame or doesn't contain the proper columns. Note the DataFrame
+    must be the first positional argument passed to this method.
+
+    Arguments:
+        - columns: A set of column names that the dataframe must have.
+                   For example, {'open', 'high', 'low', 'close'}.
+        - instance_method: Whether or not the item being decorated is
+                           an instance method. Pass False to decorate
+                           static methods and functions.
+        - args: Additional positional arguments to pass to the wrapped method.
+        - kwargs: Additional keyword arguments to pass to the wrapped method.
+
+    Returns:
+        A decorated method or function.
+    """
+    def method_wrapper(method):
+        @wraps(method)
+        def validate_wrapper(self, *args, **kwargs):
+            # functions and static methods don't pass self
+            # so self is the first positional argument in that case
+            df = (self, *args)[0 if not instance_method else 1]
+            # df = args[0] if not instance_method else self
+            if not isinstance(df, pd.DataFrame):
+                raise ValueError('Must pass in a pandas DataFrame')
+            if columns.difference(df.columns):
+                raise ValueError(
+                    f'Dataframe must contain the following columns: {columns}'
+                )
+            return method(self, *args, **kwargs)
+        return validate_wrapper
     return method_wrapper
 
 def group_stocks(mapping):
@@ -73,6 +108,7 @@ def group_stocks(mapping):
 
     return group_df
 
+@validate_df(columns={'name'}, instance_method=False)
 def describe_group(data):
     """
     Run `describe()` on the asset group created with `group_stocks()`.
@@ -84,3 +120,8 @@ def describe_group(data):
         The transpose of the grouped description statistics.
     """
     return data.groupby('name').describe().T
+
+@validate_df(columns=set(), instance_method=False)
+def make_portfolio(data, date_column='date'):
+    """Make a portfolio of assets by grouping by date and summing all columns."""
+    return data.reset_index().groupby('date').sum()
