@@ -181,7 +181,7 @@ class StockAnalyzer:
         start, end = df.close[0], df.close[-1]
         return (end - start) / start
 
-    def alpha(self, index, r_f=2.46):
+    def alpha(self, index, r_f):
         """
         Calculates the asset's alpha.
 
@@ -213,7 +213,7 @@ class StockAnalyzer:
         """
         return self.port_return(self.data.last('2M')) >= .2
 
-    def sharpe_ratio(self, r_f=2.46):
+    def sharpe_ratio(self, r_f):
         """
         Calculates the asset's sharpe ratio.
 
