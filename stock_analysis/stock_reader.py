@@ -39,9 +39,9 @@ class StockReader:
         )
 
     @property
-    def available_tickers(cls):
+    def available_tickers(self):
         """Access the names of the indices whose tickers are supported."""
-        return cls._index_tickers.keys()
+        return list(self._index_tickers.keys())
 
     @classmethod
     def get_index_ticker(cls, index):
