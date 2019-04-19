@@ -18,7 +18,7 @@ def _sanitize_label(label):
     """
     return re.sub(r'[^\w\s]', '', label).lower().replace(' ', '_')
 
-def label_sanitizer(method, *args, **kwargs):
+def label_sanitizer(method):
     """
     Decorator around a method that returns a dataframe to
     clean up all labels in said dataframe (column names and index name)
@@ -27,8 +27,6 @@ def label_sanitizer(method, *args, **kwargs):
 
     Parameters:
         - method: The method to wrap.
-        - args: Additional positional arguments to pass to the wrapped method.
-        - kwargs: Additional keyword arguments to pass to the wrapped method.
 
     Returns:
         A decorated method or function.
@@ -51,7 +49,7 @@ def label_sanitizer(method, *args, **kwargs):
         return df
     return method_wrapper
 
-def validate_df(columns, instance_method=True, *args, **kwargs):
+def validate_df(columns, instance_method=True):
     """
     Decorator that raises a ValueError if input isn't a pandas
     DataFrame or doesn't contain the proper columns. Note the DataFrame
@@ -63,8 +61,6 @@ def validate_df(columns, instance_method=True, *args, **kwargs):
         - instance_method: Whether or not the item being decorated is
                            an instance method. Pass False to decorate
                            static methods and functions.
-        - args: Additional positional arguments to pass to the wrapped method.
-        - kwargs: Additional keyword arguments to pass to the wrapped method.
 
     Returns:
         A decorated method or function.
@@ -75,7 +71,6 @@ def validate_df(columns, instance_method=True, *args, **kwargs):
             # functions and static methods don't pass self
             # so self is the first positional argument in that case
             df = (self, *args)[0 if not instance_method else 1]
-            # df = args[0] if not instance_method else self
             if not isinstance(df, pd.DataFrame):
                 raise ValueError('Must pass in a pandas DataFrame')
             if columns.difference(df.columns):
