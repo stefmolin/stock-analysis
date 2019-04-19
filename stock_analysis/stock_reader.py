@@ -37,6 +37,8 @@ class StockReader:
             ) else re.sub(r'\D', '', x),
             [start, end or datetime.date.today()]
         )
+        if self.start >= self.end:
+            raise ValueError('`start` must be before `end`')
 
     @property
     def available_tickers(self):
