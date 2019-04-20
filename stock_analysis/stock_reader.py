@@ -51,8 +51,8 @@ class StockReader:
         Class method for getting the ticker of the specified index, if known.
 
         Parameters:
-            - index: The name of the index; check `cls.available_tickers`
-                     for full list which includes:
+            - index: The name of the index; check `available_tickers`
+                     property for full list which includes:
                          - 'SP500' for S&P 500,
                          - 'DOW' for Dow Jones Industrial Average,
                          - 'NASDAQ' for NASDAQ Composite Index
@@ -62,7 +62,7 @@ class StockReader:
         """
         try:
             index = index.upper()
-        except:
+        except AttributeError:
             raise ValueError('`index` must be a string')
         return cls._index_tickers.get(index, None)
 
