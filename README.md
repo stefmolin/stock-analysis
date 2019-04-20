@@ -96,6 +96,13 @@ plt.show()
 
 <img src="images/netflix_after_hours_trades.png?raw=true" align="center" width="800" alt="after hours trades graph">
 
+Differential in closing price versus another asset:
+```
+netflix_viz.fill_between_other(fb)
+plt.show()
+```
+<img src="images/nflx_vs_fb_closing_price.png?raw=true" align="center" width="800" alt="differential between NFLX and FB">
+
 *Note: run `help()` on the `StockVisualizer` for more visualizations*
 
 #### Asset groups

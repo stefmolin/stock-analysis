@@ -288,26 +288,39 @@ class StockVisualizer(Visualizer):
 
     def fill_between_other(self, other_df, figsize=(10, 4)):
         """
-        Visualize the days where the other asset had a higher price than this one.
+        Visualize the difference in closing price between assets.
 
         Parameters:
             - other_df: The dataframe with the other asset's data.
             - figsize: A tuple of (width, height) for the plot dimensions.
 
         Returns:
-            A matplotlib plot object.
+            A matplotlib Figure object.
         """
-        plot = plt.fill_between(
-            self.data.index,
-            self.data.close,
-            other_df.close,
-            figure=plt.figure(figsize=figsize),
-            where=self.data.close < other_df.close
-        )
+        is_higher = self.data.close - other_df.close > 0
+
+        fig = plt.figure(figsize=figsize)
+
+        for exclude_mask, color, label in zip(
+            (is_higher, np.invert(is_higher)),
+            ('g', 'r'),
+            ('asset is higher', 'asset is lower')
+        ):
+            plt.fill_between(
+                self.data.index,
+                self.data.close,
+                other_df.close,
+                figure=fig,
+                where=exclude_mask,
+                color=color,
+                label=label
+            )
         plt.suptitle(
-            'Differential between assets when <other_df> asset closes higher than this one.'
+            'Differential between asset closing price (this - other)'
         )
-        return plot
+        plt.legend()
+        plt.close()
+        return fig
 
     def _window_calc_func(self, column, periods, name, func, named_arg, **kwargs):
         """
