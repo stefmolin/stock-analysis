@@ -101,7 +101,7 @@ Differential in closing price versus another asset:
 netflix_viz.fill_between_other(fb)
 plt.show()
 ```
-<img src="images/nflx_vs_fb_closing_price.png?raw=true" align="center" width="800" alt="differential between NFLX and FB">
+<img src="images/nflx_vs_fb_closing_price.png?raw=true" align="center" width="600" alt="differential between NFLX and FB">
 
 *Note: run `help()` on the `StockVisualizer` for more visualizations*
 
