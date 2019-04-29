@@ -86,7 +86,7 @@ netflix_viz.add_reference_line(
 plt.show()
 ```
 
-<img src="images/netflix_line_graph.png?raw=true" align="center" width="600" alt="line graph with reference line">
+<img src="images/netflix_line_plot.png?raw=true" align="center" width="600" alt="line plot with reference line">
 
 After hours trades:
 ```
@@ -94,7 +94,7 @@ netflix_viz.after_hours_trades()
 plt.show()
 ```
 
-<img src="images/netflix_after_hours_trades.png?raw=true" align="center" width="800" alt="after hours trades graph">
+<img src="images/netflix_after_hours_trades.png?raw=true" align="center" width="800" alt="after hours trades plot">
 
 Differential in closing price versus another asset:
 ```
@@ -168,7 +168,7 @@ plt.show()
 
 <img src="images/arima_residuals.png?raw=true" align="center" width="650" alt="ARIMA residuals">
 
-Graph the predictions:
+Plot the predictions:
 ```
 arima_ax = StockModeler.arima_predictions(
     arima_model, start=start, end=end,
@@ -193,7 +193,7 @@ plt.show()
 
 <img src="images/lm_residuals.png?raw=true" align="center" width="650" alt="linear regression residuals">
 
-Graph the predictions:
+Plot the predictions:
 ```
 linear_reg = StockModeler.regression_predictions(
     lm, start=start, end=end,

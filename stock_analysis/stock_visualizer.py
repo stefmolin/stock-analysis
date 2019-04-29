@@ -20,7 +20,7 @@ class Visualizer:
     @staticmethod
     def add_reference_line(ax, x=None, y=None, **kwargs):
         """
-        Static method for adding reference lines to graphs.
+        Static method for adding reference lines to plots.
 
         Parameters:
             - ax: The matplotlib Axes object to add the reference line to.
@@ -119,7 +119,7 @@ class Visualizer:
         Add line(s) for the moving average of a column.
 
         Parameters:
-            - column: The name of the column to graph.
+            - column: The name of the column to plot.
             - periods: The rule or list of rules for resampling,
                        like '20D' for 20-day periods.
             - kwargs: Additional arguments to pass down to the plotting function.
@@ -137,7 +137,7 @@ class Visualizer:
         Add line(s) for the exponentially smoothed moving average of a column.
 
         Parameters:
-            - column: The name of the column to graph.
+            - column: The name of the column to plot.
             - periods: The span or list of spans for smoothing,
                        like 20 for 20-day periods.
             - kwargs: Additional arguments to pass down to the plotting function.
@@ -152,7 +152,7 @@ class Visualizer:
 
     # abstract methods for subclasses to define
     def evolution_over_time(self, column, **kwargs):
-        """To be implemented by subclasses for generating line graphs."""
+        """To be implemented by subclasses for generating line plots."""
         raise NotImplementedError('To be implemented by subclasses!')
 
     def boxplot(self, **kwargs):
@@ -221,7 +221,7 @@ class StockVisualizer(Visualizer):
 
         Parameters:
             - tight: Whether or not to attempt to match up the resampled
-                     bar graph on the bottom to the line graph on the top.
+                     bar plot on the bottom to the line plot on the top.
             - kwargs: Additional keyword arguments to pass down
                       to the plotting function.
 
@@ -328,7 +328,7 @@ class StockVisualizer(Visualizer):
         a window calculation.
 
         Parameters:
-            - column: The name of the column to graph.
+            - column: The name of the column to plot.
             - periods: The rule/span or list of them to pass to the
                        resampling/smoothing function, like '20D' for 20-day periods
                        (for resampling) or 20 for a 20-day span (smoothing)
@@ -510,7 +510,7 @@ class AssetGroupVisualizer(Visualizer):
         a window calculation.
 
         Parameters:
-            - column: The name of the column to graph.
+            - column: The name of the column to plot.
             - periods: The rule/span or list of them to pass to the
                        resampling/smoothing function, like '20D' for 20-day periods
                        (for resampling) or 20 for a 20-day span (smoothing)
