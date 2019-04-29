@@ -279,12 +279,28 @@ class StockVisualizer(Visualizer):
         Returns:
             A matplotlib plot object.
         """
-        return plt.fill_between(
-            self.data.index,
-            self.data.open,
-            self.data.close,
-            figure=plt.figure(figsize=figsize)
-        )
+        is_higher = self.data.close - self.data.open > 0
+
+        fig = plt.figure(figsize=figsize)
+
+        for exclude_mask, color, label in zip(
+            (is_higher, np.invert(is_higher)),
+            ('g', 'r'),
+            ('price rose', 'price fell')
+        ):
+            plt.fill_between(
+                self.data.index,
+                self.data.open,
+                self.data.close,
+                figure=fig,
+                where=exclude_mask,
+                color=color,
+                label=label
+            )
+        plt.suptitle('Daily price change (open to close)')
+        plt.legend()
+        plt.close()
+        return fig
 
     def fill_between_other(self, other_df, figsize=(10, 4)):
         """
