@@ -228,16 +228,16 @@ class StockVisualizer(Visualizer):
         Returns:
             A matplotlib Figure object.
         """
-        fig, axes = plt.subplots(2, 1, figsize=(12, 8))
-        self.data.close.plot(ax=axes[0])
+        fig, axes = plt.subplots(2, 1, figsize=(15, 15))
+        self.data.close.plot(ax=axes[0], title='Closing Price')
         monthly = self.data.volume.resample('1M').sum()
-        monthly.index = monthly.index.strftime('%b')
+        monthly.index = monthly.index.strftime('%b\n%Y')
         monthly.plot(
-            kind='bar', ax=axes[1], color='blue', position=0
+            kind='bar', ax=axes[1], color='blue', rot=0, title='Volume Traded'
         )
         if tight:
             axes[0].set_xlim(self.data.index.min(), self.data.index.max())
-            axes[1].set_xlim(0, axes[1].get_xlim()[1] - 0.25)
+            axes[1].set_xlim(-0.25, axes[1].get_xlim()[1] - 0.25)
         plt.close()
         return fig
 
@@ -361,9 +361,9 @@ class StockVisualizer(Visualizer):
             self.data[column].pipe(
                 func, **{named_arg: period}
             ).mean().plot(
-                ax = ax,
+                ax=ax,
                 linestyle='--',
-                label=f'{period} {name}'
+                label=f'{period if isinstance(period, str) else str(period) + "D"} {name}'
             )
         plt.legend()
         return ax
@@ -546,9 +546,9 @@ class AssetGroupVisualizer(Visualizer):
                 subset[column].pipe(
                     func, **{named_arg: period}
                 ).mean().plot(
-                    ax = ax,
+                    ax=ax,
                     linestyle='--',
-                    label=f'{period} {name}'
+                    label=f'{period if isinstance(period, str) else str(period) + "D"} {name}'
                 )
             ax.legend()
         return ax
