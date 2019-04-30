@@ -169,6 +169,9 @@ class StockModeler:
             model_fitted.resid, name='residuals'
         )
         residuals.plot(style='bo', ax=axes[0], title='Residuals')
+        axes[0].set_xlabel('Date')
+        axes[0].set_ylabel('Residual')
         residuals.plot(kind='kde', ax=axes[1], title='Residuals KDE')
+        axes[1].set_xlabel('Residual')
         plt.close()
         return fig
