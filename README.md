@@ -83,6 +83,7 @@ netflix_viz.add_reference_line(
     label=f'highest value ({nflx.high.idxmax():%b %d})',
     alpha=0.5
 )
+ax.set_ylabel('price ($)')
 plt.show()
 ```
 

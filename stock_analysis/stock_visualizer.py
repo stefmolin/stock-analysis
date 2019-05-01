@@ -226,27 +226,26 @@ class StockVisualizer(Visualizer):
                       to the plotting function.
 
         Returns:
-            A matplotlib Figure object.
+            A matplotlib Axes object.
         """
         fig, axes = plt.subplots(2, 1, figsize=(15, 15))
-        self.data.close.plot(ax=axes[0], title='Closing Price')
+        self.data.close.plot(ax=axes[0], title='Closing Price').set_ylabel('price')
         monthly = self.data.volume.resample('1M').sum()
         monthly.index = monthly.index.strftime('%b\n%Y')
         monthly.plot(
             kind='bar', ax=axes[1], color='blue', rot=0, title='Volume Traded'
-        )
+        ).set_ylabel('volume traded')
         if tight:
             axes[0].set_xlim(self.data.index.min(), self.data.index.max())
             axes[1].set_xlim(-0.25, axes[1].get_xlim()[1] - 0.25)
-        plt.close()
-        return fig
+        return axes
 
     def after_hours_trades(self):
         """
         Visualize the effect of after hours trading on this asset.
 
         Returns:
-            A matplotlib Figure object.
+            A matplotlib Axes object.
         """
         after_hours = (self.data.open - self.data.close.shift())
 
@@ -256,7 +255,7 @@ class StockVisualizer(Visualizer):
         after_hours.plot(
             ax=axes[0],
             title='After hours trading\n(Open Price - Prior Day\'s Close)'
-        )
+        ).set_ylabel('price')
 
         monthly_effect.index = monthly_effect.index.strftime('%b')
         monthly_effect.plot(
@@ -266,8 +265,8 @@ class StockVisualizer(Visualizer):
             color=np.where(monthly_effect >= 0, 'g', 'r'),
             rot=90
         ).axhline(0, color='black', linewidth=1)
-        plt.close()
-        return fig
+        axes[1].set_ylabel('price')
+        return axes
 
     def open_to_close(self, figsize=(10, 4)):
         """
@@ -277,7 +276,7 @@ class StockVisualizer(Visualizer):
             - figsize: A tuple of (width, height) for the plot dimensions.
 
         Returns:
-            A matplotlib plot object.
+            A matplotlib Figure object.
         """
         is_higher = self.data.close - self.data.open > 0
 
@@ -335,6 +334,7 @@ class StockVisualizer(Visualizer):
             'Differential between asset closing price (this - other)'
         )
         plt.legend()
+        plt.ylabel('price')
         plt.close()
         return fig
 
@@ -517,8 +517,7 @@ class AssetGroupVisualizer(Visualizer):
         fig, axes = self._get_layout()
         for ax, (name, data) in zip(axes, self.data.groupby(self.group_by)):
             sns.distplot(data[column], ax=ax, axlabel=f'{name} - {column}')
-        plt.close()
-        return fig
+        return axes
 
     def _window_calc_func(self, column, periods, name, func, named_arg, **kwargs):
         """
@@ -558,7 +557,7 @@ class AssetGroupVisualizer(Visualizer):
         Visualize the effect of after hours trading on this asset.
 
         Returns:
-            A matplotlib Figure object.
+            A matplotlib Axes object.
         """
         num_categories = self.data[self.group_by].nunique()
         fig, axes = plt.subplots(
@@ -576,6 +575,7 @@ class AssetGroupVisualizer(Visualizer):
                 ax=ax[0],
                 title=f'{name} Open Price - Prior Day\'s Close'
             )
+            ax[0].set_ylabel('price')
 
             monthly_effect.index = monthly_effect.index.strftime('%b')
             monthly_effect.plot(
@@ -585,8 +585,8 @@ class AssetGroupVisualizer(Visualizer):
                 color=np.where(monthly_effect >= 0, 'g', 'r'),
                 rot=90
             ).axhline(0, color='black', linewidth=1)
-        plt.close()
-        return fig
+            ax[1].set_ylabel('price')
+        return axes
 
     def pairplot(self, **kwargs):
         """

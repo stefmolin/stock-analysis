@@ -162,7 +162,7 @@ class StockModeler:
             - model_fitted: The fitted model
 
         Returns:
-            A matplotlib figure object.
+            A matplotlib Axes object.
         """
         fig, axes = plt.subplots(1, 2, figsize=(15, 5))
         residuals = pd.Series(
@@ -173,5 +173,4 @@ class StockModeler:
         axes[0].set_ylabel('Residual')
         residuals.plot(kind='kde', ax=axes[1], title='Residuals KDE')
         axes[1].set_xlabel('Residual')
-        plt.close()
-        return fig
+        return axes
