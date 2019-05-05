@@ -297,6 +297,8 @@ class StockVisualizer(Visualizer):
                 label=label
             )
         plt.suptitle('Daily price change (open to close)')
+        plt.xlabel('date')
+        plt.ylabel('price')
         plt.legend()
         plt.close()
         return fig
