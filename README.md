@@ -2,19 +2,19 @@
 Package for making elements of technical analysis of a stock easier. This package is meant to be a starting point for you to develop your own. As such, all the instructions for installing/setup will be assuming you will continue to develop on your end.
 
 ## Setup
-```
+```shell
 # should install requirements.txt packages
-pip install -e stock-analysis # path to top level where setup.py is
+$ pip install -e stock-analysis # path to top level where setup.py is
 
 # if not, install them explicitly
-pip install -r requirements.txt
+$ pip install -r requirements.txt
 ```
 
 ## Usage
 This section will show some of the functionality of each class; however, it is by no means exhaustive.
 
 ### Getting data
-```
+```python
 from stock_analysis import StockReader
 
 reader = StockReader('2017-01-01', '2018-12-31')
@@ -33,7 +33,7 @@ sp = reader.get_index_data()
 ```
 
 ### Grouping data
-```
+```python
 from stock_analysis.utils import group_stocks, describe_group
 
 faang = group_stocks(
@@ -52,7 +52,7 @@ describe_group(faang)
 
 ### Building a portfolio
 Groups assets by date and sums columns to build a portfolio.
-```
+```python
 from stock_analysis.utils import make_portfolio
 
 faang_portfolio = make_portfolio(faang)
@@ -63,7 +63,7 @@ Be sure to check out the other methods here for different plot types, reference 
 
 #### Single asset
 Evolution over time:
-```
+```python
 import matplotlib.pyplot as plt
 from stock_analysis import StockVisualizer
 
@@ -90,7 +90,7 @@ plt.show()
 <img src="images/netflix_line_plot.png?raw=true" align="center" width="600" alt="line plot with reference line">
 
 After hours trades:
-```
+```python
 netflix_viz.after_hours_trades()
 plt.show()
 ```
@@ -98,7 +98,7 @@ plt.show()
 <img src="images/netflix_after_hours_trades.png?raw=true" align="center" width="800" alt="after hours trades plot">
 
 Differential in closing price versus another asset:
-```
+```python
 netflix_viz.fill_between_other(fb)
 plt.show()
 ```
@@ -108,7 +108,7 @@ plt.show()
 
 #### Asset groups
 Correlation heatmap:
-```
+```python
 from stock_analysis import AssetGroupVisualizer
 
 faang_viz = AssetGroupVisualizer(faang)
@@ -123,7 +123,7 @@ faang_viz.heatmap(True)
 Below are a few of the metrics you can calculate.
 
 #### Single asset
-```
+```python
 from stock_analysis import StockAnalyzer
 
 nflx_analyzer = stock_analysis.StockAnalyzer(nflx)
@@ -132,7 +132,7 @@ nflx_analyzer.annualized_volatility()
 
 #### Asset group
 Methods of the `StockAnalyzer` can be accessed by name with the `AssetGroupAnalyzer`'s `analyze()` method.
-```
+```python
 from stock_analysis import AssetGroupAnalyzer
 
 faang_analyzer = AssetGroupAnalyzer(faang)
@@ -142,12 +142,12 @@ faang_analyzer.analyze('beta')
 ```
 
 ### Modeling
-```
+```python
 from stock_analysis import StockModeler
 ```
 
 #### Time series decomposition
-```
+```python
 decomposition = StockModeler.decompose(nflx, 20)
 fig = decomposition.plot()
 plt.show()
@@ -157,12 +157,12 @@ plt.show()
 
 #### ARIMA
 Build the model:
-```
+```python
 arima_model = StockModeler.arima(nflx, 10, 1, 5)
 ```
 
 Check the residuals:
-```
+```python
 StockModeler.plot_residuals(arima_model)
 plt.show()
 ```
@@ -170,7 +170,7 @@ plt.show()
 <img src="images/arima_residuals.png?raw=true" align="center" width="650" alt="ARIMA residuals">
 
 Plot the predictions:
-```
+```python
 arima_ax = StockModeler.arima_predictions(
     arima_model, start=start, end=end,
     df=nflx, ax=axes[0], title='ARIMA'
@@ -182,12 +182,12 @@ plt.show()
 
 #### Linear regression
 Build the model:
-```
+```python
 X, Y, lm = StockModeler.regression(nflx)
 ```
 
 Check the residuals:
-```
+```python
 StockModeler.plot_residuals(lm)
 plt.show()
 ```
@@ -195,7 +195,7 @@ plt.show()
 <img src="images/lm_residuals.png?raw=true" align="center" width="650" alt="linear regression residuals">
 
 Plot the predictions:
-```
+```python
 linear_reg = StockModeler.regression_predictions(
     lm, start=start, end=end,
     df=nflx, ax=axes[1], title='Linear Regression'
