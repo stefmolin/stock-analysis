@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(
     name='stock_analysis',
-    version='0.1',
+    version='0.2',
     description='Classes for technical analysis of stocks.',
     author='Stefanie Molin',
     author_email='24376333+stefmolin@users.noreply.github.com',

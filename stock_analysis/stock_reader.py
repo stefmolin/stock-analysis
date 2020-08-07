@@ -1,6 +1,6 @@
 """Gathering select stock data."""
 
-import datetime
+import datetime as dt
 import re
 
 import pandas as pd
@@ -33,9 +33,9 @@ class StockReader:
         """
         self.start, self.end = map(
             lambda x: x.strftime('%Y%m%d') if isinstance(
-                x, datetime.date
+                x, dt.date
             ) else re.sub(r'\D', '', x),
-            [start, end or datetime.date.today()]
+            [start, end or dt.date.today()]
         )
         if self.start >= self.end:
             raise ValueError('`start` must be before `end`')
@@ -96,14 +96,28 @@ class StockReader:
         Returns:
             A pandas dataframe with the bitcoin data.
         """
-        return pd.read_html(
-            'https://coinmarketcap.com/currencies/bitcoin/historical-data/?'
-            'start={}&end={}'.format(
-                self.start, self.end
-            ),
-            parse_dates=[0],
-            index_col=[0]
-        )[0].sort_index()
+        tables = pd.read_html(
+            'https://coinmarketcap.com/'
+            'currencies/bitcoin/historical-data/?'
+            'start={}&end{}'.format(self.start, self.end),
+            parse_dates=[0], index_col=[0]
+        )
+
+        # try to find the appropriate table on the page
+        for table in tables:
+            # we need 6 columns at least: date, open, high, low, close, volume
+            if table.shape[1] >= 6 and not table.empty:
+                # make sure the dates are correct (website doesn't respect end date)
+                # sort before slicing for bug in pandas v1.1.0: https://github.com/pandas-dev/pandas/issues/35509
+                df = table.sort_index()[self.start:self.end]
+                break
+        else:
+            raise ValueError('Unable to find the proper table')
+
+        if df.empty:
+            raise ValueError('No data found for that date range.')
+        return df
+
 
     @label_sanitizer
     def get_index_data(self, index='SP500'):
