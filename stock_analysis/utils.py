@@ -51,11 +51,11 @@ def label_sanitizer(method):
 
 def validate_df(columns, instance_method=True):
     """
-    Decorator that raises a ValueError if input isn't a pandas
+    Decorator that raises a `ValueError` if input isn't a pandas
     DataFrame or doesn't contain the proper columns. Note the DataFrame
     must be the first positional argument passed to this method.
 
-    Arguments:
+    Parameters:
         - columns: A set of column names that the dataframe must have.
                    For example, {'open', 'high', 'low', 'close'}.
         - instance_method: Whether or not the item being decorated is
