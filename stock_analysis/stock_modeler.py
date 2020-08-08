@@ -18,7 +18,7 @@ class StockModeler:
 
     @staticmethod
     @validate_df(columns={'close'}, instance_method=False)
-    def decompose(df, freq, model='additive'):
+    def decompose(df, period, model='additive'):
         """
         Decompose the closing price of the stock into trend, seasonal,
         and remainder components.
@@ -26,14 +26,14 @@ class StockModeler:
         Parameters:
             - df: The dataframe containing the stock closing price as `close`
                   and with a time index.
-            - freq: The number of periods in the frequency.
+            - period: The number of periods in the frequency.
             - model: How to compute the decomposition
                      ('additive', 'multiplicative')
 
         Returns:
             A statsmodels decomposition object.
         """
-        return seasonal_decompose(df.close, model=model, freq=freq)
+        return seasonal_decompose(df.close, model=model, period=period)
 
     @staticmethod
     @validate_df(columns={'close'}, instance_method=False)
@@ -154,19 +154,21 @@ class StockModeler:
         return ax if plot else predictions
 
     @staticmethod
-    def plot_residuals(model_fitted):
+    def plot_residuals(model_fitted, freq='B'):
         """
         Visualize the residuals from the model.
 
         Parameters:
             - model_fitted: The fitted model
+            - freq: Frequency that the predictions were made on.
+                    Default is 'B' (business day).
 
         Returns:
             A matplotlib Axes object.
         """
         fig, axes = plt.subplots(1, 2, figsize=(15, 5))
         residuals = pd.Series(
-            model_fitted.resid, name='residuals'
+            model_fitted.resid.asfreq(freq), name='residuals'
         )
         residuals.plot(style='bo', ax=axes[0], title='Residuals')
         axes[0].set_xlabel('Date')
