@@ -191,7 +191,7 @@ class StockVisualizer(Visualizer):
 
     def boxplot(self, **kwargs):
         """
-        Generate boxplots for all columns.
+        Generate box plots for all columns.
 
         Parameters:
             - kwargs: Additional keyword arguments to pass down
