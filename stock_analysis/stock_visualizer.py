@@ -113,7 +113,7 @@ class Visualizer:
         To be implemented by subclasses. Defines how to add lines resulting
         from window calculations.
         """
-        raise NotImplementedError('To be implemented by subclasses!')
+        raise NotImplementedError('To be implemented by subclasses.')
 
     def moving_average(self, column, periods, **kwargs):
         """
@@ -154,23 +154,23 @@ class Visualizer:
     # abstract methods for subclasses to define
     def evolution_over_time(self, column, **kwargs):
         """To be implemented by subclasses for generating line plots."""
-        raise NotImplementedError('To be implemented by subclasses!')
+        raise NotImplementedError('To be implemented by subclasses.')
 
     def boxplot(self, **kwargs):
         """To be implemented by subclasses for generating boxplots."""
-        raise NotImplementedError('To be implemented by subclasses!')
+        raise NotImplementedError('To be implemented by subclasses.')
 
     def histogram(self, column, **kwargs):
         """To be implemented by subclasses for generating histograms."""
-        raise NotImplementedError('To be implemented by subclasses!')
+        raise NotImplementedError('To be implemented by subclasses.')
 
     def after_hours_trades(self):
         """To be implemented by subclasses."""
-        raise NotImplementedError('To be implemented by subclasses!')
+        raise NotImplementedError('To be implemented by subclasses.')
 
     def pairplot(self, **kwargs):
         """To be implemented by subclasses for generating pairplots."""
-        raise NotImplementedError('To be implemented by subclasses!')
+        raise NotImplementedError('To be implemented by subclasses.')
 
 class StockVisualizer(Visualizer):
     """Visualizer for a single stock."""
