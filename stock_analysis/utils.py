@@ -5,6 +5,7 @@ import re
 
 import pandas as pd
 
+
 def _sanitize_label(label):
     """
     Clean up a label by removing non-letter, non-space characters and
@@ -17,6 +18,7 @@ def _sanitize_label(label):
         The sanitized label.
     """
     return re.sub(r'[^\w\s]', '', label).lower().replace(' ', '_')
+
 
 def label_sanitizer(method):
     """
@@ -49,6 +51,7 @@ def label_sanitizer(method):
         return df
     return method_wrapper
 
+
 def validate_df(columns, instance_method=True):
     """
     Decorator that raises a `ValueError` if input isn't a pandas
@@ -59,7 +62,7 @@ def validate_df(columns, instance_method=True):
         - columns: A set of column names that the dataframe must have.
                    For example, {'open', 'high', 'low', 'close'}.
         - instance_method: Whether or not the item being decorated is
-                           an instance method. Pass False to decorate
+                           an instance method. Pass `False` to decorate
                            static methods and functions.
 
     Returns:
@@ -80,6 +83,7 @@ def validate_df(columns, instance_method=True):
             return method(self, *args, **kwargs)
         return validate_wrapper
     return method_wrapper
+
 
 def group_stocks(mapping):
     """
@@ -103,6 +107,7 @@ def group_stocks(mapping):
 
     return group_df
 
+
 @validate_df(columns={'name'}, instance_method=False)
 def describe_group(data):
     """
@@ -115,6 +120,7 @@ def describe_group(data):
         The transpose of the grouped description statistics.
     """
     return data.groupby('name').describe().T
+
 
 @validate_df(columns=set(), instance_method=False)
 def make_portfolio(data, date_column='date'):
