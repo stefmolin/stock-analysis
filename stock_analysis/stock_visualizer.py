@@ -370,6 +370,36 @@ class StockVisualizer(Visualizer):
         plt.legend()
         return ax
 
+    def pairplot(self, **kwargs):
+        """
+        Generate a seaborn pairplot for this asset.
+
+        Parameters:
+            - kwargs: Keyword arguments to pass down to `sns.pairplot()`
+
+        Returns:
+            A seaborn pairplot
+        """
+        return sns.pairplot(self.data, **kwargs)
+
+    def jointplot(self, other, column, **kwargs):
+        """
+        Generate a seaborn jointplot for given column in asset compared to
+        another asset.
+
+        Parameters:
+            - other: The other asset's dataframe
+            - column: The column name to use for the comparison.
+            - kwargs: Keyword arguments to pass down to `sns.pairplot()`
+
+        Returns:
+            A seaborn jointplot
+        """
+        return sns.jointplot(
+            x=self.data[column],
+            y=other[column],
+            **kwargs
+        )
     def correlation_heatmap(self, other):
         """
         Plot the correlations between the same column between this asset and
@@ -404,36 +434,6 @@ class StockVisualizer(Visualizer):
             vmax=1
         )
 
-    def pairplot(self, **kwargs):
-        """
-        Generate a seaborn pairplot for this asset.
-
-        Parameters:
-            - kwargs: Keyword arguments to pass down to `sns.pairplot()`
-
-        Returns:
-            A seaborn pairplot
-        """
-        return sns.pairplot(self.data, **kwargs)
-
-    def jointplot(self, other, column, **kwargs):
-        """
-        Generate a seaborn jointplot for given column in asset compared to
-        another asset.
-
-        Parameters:
-            - other: The other asset's dataframe
-            - column: The column name to use for the comparison.
-            - kwargs: Keyword arguments to pass down to `sns.pairplot()`
-
-        Returns:
-            A seaborn jointplot
-        """
-        return sns.jointplot(
-            x=self.data[column],
-            y=other[column],
-            **kwargs
-        )
 
 class AssetGroupVisualizer(Visualizer):
     """Class for visualizing groups of assets in a single dataframe."""
