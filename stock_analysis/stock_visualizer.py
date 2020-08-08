@@ -95,7 +95,7 @@ class Visualizer:
     @staticmethod
     def _iter_handler(items):
         """
-        Static method for making a list out of a item if it isn't a list or
+        Static method for making a list out of an item if it isn't a list or
         tuple already.
 
         Parameters:
