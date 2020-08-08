@@ -9,6 +9,7 @@ import seaborn as sns
 
 from .utils import validate_df
 
+
 class Visualizer:
     """Base visualizer class not intended for direct use."""
 
@@ -335,8 +336,12 @@ class StockVisualizer(Visualizer):
         plt.suptitle(
             'Differential between asset closing price (this - other)'
         )
-        plt.legend()
+        plt.legend(bbox_to_anchor=(0.7, -0.1), framealpha=0, ncol=2)
         plt.ylabel('price')
+
+        for spine in ['top', 'right']:
+            fig.axes[0].spines[spine].set_visible(False)
+
         plt.close()
         return fig
 
@@ -398,7 +403,10 @@ class StockVisualizer(Visualizer):
             xticklabels=self.data.columns,
             yticklabels=self.data.columns,
             center=0,
-            mask=mask
+            mask=mask,
+            cmap='Blues',
+            vmin=-1,
+            vmax=1
         )
 
     def pairplot(self, **kwargs):
@@ -565,7 +573,7 @@ class AssetGroupVisualizer(Visualizer):
         fig, axes = plt.subplots(
             num_categories,
             2,
-            figsize=(15, 8*num_categories)
+            figsize=(15, 8 * num_categories)
         )
 
         for ax, (name, data) in zip(axes, self.data.groupby(self.group_by)):
