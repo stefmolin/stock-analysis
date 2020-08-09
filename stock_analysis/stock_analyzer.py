@@ -9,7 +9,7 @@ class StockAnalyzer:
 
     @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df):
-        """Create a StockAnalyzer by passing in a pandas DataFrame of OHLC data."""
+        """Create a `StockAnalyzer` by passing in a pandas DataFrame of OHLC data."""
         self.data = df
 
     @property
@@ -62,7 +62,7 @@ class StockAnalyzer:
         elif level == 2:
             res = self.pivot_point + (self.last_high - self.last_low)
         elif level == 3:
-            res = self.last_high + 2*(self.pivot_point - self.last_low)
+            res = self.last_high + 2 * (self.pivot_point - self.last_low)
         else:
             raise ValueError('Not a valid level. Must be 1, 2, or 3')
         return res
@@ -82,7 +82,7 @@ class StockAnalyzer:
         elif level == 2:
             sup = self.pivot_point - (self.last_high - self.last_low)
         elif level == 3:
-            sup = self.last_low - 2*(self.last_high - self.pivot_point)
+            sup = self.last_low - 2 * (self.last_high - self.pivot_point)
         else:
             raise ValueError('Not a valid level. Must be 1, 2, or 3')
         return sup
@@ -95,8 +95,8 @@ class StockAnalyzer:
             - periods: The number of periods to use for the calculation;
                        default is 252 for the trading days in a year.
                        Note if you provide a number greater than the number
-                       of trading periods in the data, the number of periods
-                       in the data will be used instead.
+                       of trading periods in the data, `self._max_periods`
+                       will be used instead.
 
         Returns:
             The standard deviation
@@ -115,8 +115,8 @@ class StockAnalyzer:
             - periods: The number of periods to use for the calculation;
                        default is 252 for the trading days in a year.
                        Note if you provide a number greater than the number
-                       of trading periods in the data, the number of periods
-                       in the data will be used instead.
+                       of trading periods in the data, `self._max_periods`
+                       will be used instead.
 
         Returns:
             A pandas series.
@@ -168,7 +168,7 @@ class StockAnalyzer:
         return (1 + self.pct_change).cumprod()
 
     @staticmethod
-    def port_return(df):
+    def portfolio_return(df):
         """
         Calculate the return assuming no distribution per share.
 
@@ -193,9 +193,9 @@ class StockAnalyzer:
             Alpha, as a float.
         """
         r_f /= 100
-        r_m = self.port_return(index)
+        r_m = self.portfolio_return(index)
         beta = self.beta(index)
-        r = self.port_return(self.data)
+        r = self.portfolio_return(self.data)
         alpha = r - r_f - beta * (r_m - r_f)
         return alpha
 
@@ -204,24 +204,24 @@ class StockAnalyzer:
         Determine if a stock is in a bear market, meaning its
         return in the last 2 months is a decline of 20% or more.
         """
-        return self.port_return(self.data.last('2M')) <= -.2
+        return self.portfolio_return(self.data.last('2M')) <= -.2
 
     def is_bull_market(self):
         """
         Determine if a stock is in a bull market, meaning its
-        return in the last 2 months is a increase of 20% or more.
+        return in the last 2 months is an increase of 20% or more.
         """
-        return self.port_return(self.data.last('2M')) >= .2
+        return self.portfolio_return(self.data.last('2M')) >= .2
 
     def sharpe_ratio(self, r_f):
         """
-        Calculates the asset's sharpe ratio.
+        Calculates the asset's Snharpe ratio.
 
         Parameters:
             - r_f: The risk-free rate of return.
 
         Returns:
-            The sharpe ratio, as a float.
+            The Sharpe ratio, as a float.
         """
         return (
             self.cumulative_returns().last('1D').iat[0] - r_f
@@ -233,7 +233,7 @@ class AssetGroupAnalyzer:
     @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df, group_by='name'):
         """
-        Create a AssetGroupAnalyzer by passing in a pandas DataFrame
+        Create an `AssetGroupAnalyzer` by passing in a pandas DataFrame
         and column to group by.
         """
         self.data = df
@@ -248,13 +248,13 @@ class AssetGroupAnalyzer:
         taking advantage of composition instead of inheritance.
         """
         return {
-            group : StockAnalyzer(data) \
+            group: StockAnalyzer(data)
             for group, data in self.data.groupby(self.group_by)
         }
 
     def analyze(self, func_name, **kwargs):
         """
-        Run a StockAnalyzer method on all assets in the group.
+        Run a `StockAnalyzer` method on all assets in the group.
 
         Parameters:
             - func_name: The name of the method to run.
@@ -269,6 +269,6 @@ class AssetGroupAnalyzer:
         if not kwargs:
             kwargs = {}
         return {
-            group : getattr(StockAnalyzer, func_name)(analyzer, **kwargs) \
+            group: getattr(StockAnalyzer, func_name)(analyzer, **kwargs)
             for group, analyzer in self.analyzers.items()
         }
