@@ -426,7 +426,6 @@ class StockVisualizer(Visualizer):
             yticklabels=self.data.columns,
             center=0,
             mask=mask,
-            cmap='Blues',
             vmin=-1,
             vmax=1
         )
@@ -626,4 +625,4 @@ class AssetGroupVisualizer(Visualizer):
         )
         if pct_change:
             pivot = pivot.pct_change()
-        return sns.heatmap(pivot.corr(), annot=True, center=0, **kwargs)
+        return sns.heatmap(pivot.corr(), annot=True, center=0, vmin=-1, vmax=1, **kwargs)
