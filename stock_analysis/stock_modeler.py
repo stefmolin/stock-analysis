@@ -13,7 +13,7 @@ class StockModeler:
 
     def __init__(self):
         raise NotImplementedError(
-            "This class is to be used statically, don't instantiate it!"
+            "This class must used statically, don't instantiate it."
         )
 
     @staticmethod
@@ -141,7 +141,7 @@ class StockModeler:
             if i == 0:
                 pred = model.predict(last)
             else:
-                pred = model.predict(predictions.iloc[i-1])
+                pred = model.predict(predictions.iloc[i - 1])
             predictions.loc[date] = pred[0]
 
         if plot:
