@@ -188,6 +188,8 @@ class StockAnalyzer:
         Parameters:
             - index: The index to compare to.
             - r_f: The risk-free rate of return.
+                   Consult https://www.treasury.gov/resource-center/data-chart-center/interest-rates/pages/TextView.aspx?data=yield
+                   for US Treasury Bill historical rates.
 
         Returns:
             Alpha, as a float.
@@ -215,10 +217,12 @@ class StockAnalyzer:
 
     def sharpe_ratio(self, r_f):
         """
-        Calculates the asset's Snharpe ratio.
+        Calculates the asset's Sharpe ratio.
 
         Parameters:
-            - r_f: The risk-free rate of return.
+            - r_f: The risk-free rate of return
+                   Consult https://www.treasury.gov/resource-center/data-chart-center/interest-rates/pages/TextView.aspx?data=yield
+                   for US Treasury Bill historical rates.
 
         Returns:
             The Sharpe ratio, as a float.
