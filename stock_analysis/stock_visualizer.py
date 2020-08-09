@@ -467,7 +467,7 @@ class AssetGroupVisualizer(Visualizer):
 
     def boxplot(self, column, **kwargs):
         """
-        Generate boxplots for a given column in all assets.
+        Generate box plots for a given column in all assets.
 
         Parameters:
             - column: The name of the column to visualize.
@@ -493,7 +493,7 @@ class AssetGroupVisualizer(Visualizer):
         """
         subplots_needed = self.data[self.group_by].nunique()
         rows = math.ceil(subplots_needed / 2)
-        fig, axes = plt.subplots(rows, 2, figsize=(15, 5*rows))
+        fig, axes = plt.subplots(rows, 2, figsize=(15, 5 * rows))
         if rows > 1:
             axes = axes.flatten()
         if subplots_needed < len(axes):
@@ -540,7 +540,7 @@ class AssetGroupVisualizer(Visualizer):
         """
         fig, axes = self._get_layout()
         for ax, asset_name in zip(axes, self.data[self.group_by].unique()):
-            subset = self.data[self.data[self.group_by] == asset_name]
+            subset = self.data.query(f'{self.group_by} == "{asset_name}"')
             ax = subset.plot(y=column, ax=ax, label=asset_name, **kwargs)
             for period in self._iter_handler(periods):
                 subset[column].pipe(
