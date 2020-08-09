@@ -555,7 +555,7 @@ class AssetGroupVisualizer(Visualizer):
 
     def after_hours_trades(self):
         """
-        Visualize the effect of after hours trading on this asset.
+        Visualize the effect of after-hours trading on this asset.
 
         Returns:
             A matplotlib Axes object.
@@ -582,7 +582,7 @@ class AssetGroupVisualizer(Visualizer):
             monthly_effect.plot(
                 ax=ax[1],
                 kind='bar',
-                title=f'{name} after hours trading monthly effect',
+                title=f'{name} after-hours trading monthly effect',
                 color=np.where(monthly_effect >= 0, 'g', 'r'),
                 rot=90
             ).axhline(0, color='black', linewidth=1)
