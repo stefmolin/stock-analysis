@@ -172,6 +172,7 @@ class Visualizer:
         """To be implemented by subclasses for generating pairplots."""
         raise NotImplementedError('To be implemented by subclasses.')
 
+
 class StockVisualizer(Visualizer):
     """Visualizer for a single stock."""
 
@@ -264,6 +265,43 @@ class StockVisualizer(Visualizer):
         axes[1].set_ylabel('price')
         return axes
 
+    @staticmethod
+    def fill_between(y1, y2, title, label_higher, label_lower, figsize, legend_x):
+        """
+        Visualize the difference between assets.
+
+        Parameters:
+            - y1, y2: Data to be plotted with fill between y2 - y1.
+            - title: The title for the plot.
+            - label_higher: String label for when y2 is higher than y1.
+            - label_lower: String label for when y2 is lower than y1.
+            - figsize: A tuple of (width, height) for the plot dimensions.
+            - legend_x: Where to place the legend below the plot.
+
+        Returns:
+            A matplotlib Axes object.
+        """
+        is_higher = y2 - y1 > 0
+
+        fig = plt.figure(figsize=figsize)
+
+        for exclude_mask, color, label in zip(
+            (is_higher, np.invert(is_higher)),
+            ('g', 'r'),
+            (label_higher, label_lower)
+        ):
+            plt.fill_between(
+                y2.index, y2, y1, figure=fig,
+                where=exclude_mask, color=color, label=label
+            )
+        plt.suptitle(title)
+        plt.legend(bbox_to_anchor=(legend_x, -0.1), framealpha=0, ncol=2)
+
+        for spine in ['top', 'right']:
+            fig.axes[0].spines[spine].set_visible(False)
+
+        return fig.axes[0]
+
     def open_to_close(self, figsize=(10, 4)):
         """
         Visualize the daily change from open to close price.
@@ -272,32 +310,14 @@ class StockVisualizer(Visualizer):
             - figsize: A tuple of (width, height) for the plot dimensions.
 
         Returns:
-            A matplotlib Figure object.
+            A matplotlib Axes object.
         """
-        is_higher = self.data.close - self.data.open > 0
-
-        fig = plt.figure(figsize=figsize)
-
-        for exclude_mask, color, label in zip(
-            (is_higher, np.invert(is_higher)),
-            ('g', 'r'),
-            ('price rose', 'price fell')
-        ):
-            plt.fill_between(
-                self.data.index,
-                self.data.open,
-                self.data.close,
-                figure=fig,
-                where=exclude_mask,
-                color=color,
-                label=label
-            )
-        plt.suptitle('Daily price change (open to close)')
-        plt.xlabel('date')
-        plt.ylabel('price')
-        plt.legend()
-        plt.close()
-        return fig
+        axes = self.fill_between(
+            self.data.open, self.data.close, figsize=figsize,
+            legend_x=0.67, title='Daily price change (open to close)',
+            label_higher='price rose', label_lower='price fell'
+        ).set_ylabel('price')
+        return axes
 
     def fill_between_other(self, other_df, figsize=(10, 4)):
         """
@@ -308,37 +328,14 @@ class StockVisualizer(Visualizer):
             - figsize: A tuple of (width, height) for the plot dimensions.
 
         Returns:
-            A matplotlib Figure object.
+            A matplotlib Axes object.
         """
-        is_higher = self.data.close - other_df.close > 0
-
-        fig = plt.figure(figsize=figsize)
-
-        for exclude_mask, color, label in zip(
-            (is_higher, np.invert(is_higher)),
-            ('g', 'r'),
-            ('asset is higher', 'asset is lower')
-        ):
-            plt.fill_between(
-                self.data.index,
-                self.data.close,
-                other_df.close,
-                figure=fig,
-                where=exclude_mask,
-                color=color,
-                label=label
-            )
-        plt.suptitle(
-            'Differential between asset closing price (this - other)'
-        )
-        plt.legend(bbox_to_anchor=(0.7, -0.1), framealpha=0, ncol=2)
-        plt.ylabel('price')
-
-        for spine in ['top', 'right']:
-            fig.axes[0].spines[spine].set_visible(False)
-
-        plt.close()
-        return fig
+        axes = self.fill_between(
+            other_df.open, self.data.close, figsize=figsize, legend_x=0.7,
+            title='Differential between asset closing price (this - other)',
+            label_higher='asset is higher', label_lower='asset is lower'
+        ).set_ylabel('price')
+        return axes
 
     def _window_calc_func(self, column, periods, name, func, named_arg, **kwargs):
         """
