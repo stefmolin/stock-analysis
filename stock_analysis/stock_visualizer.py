@@ -239,7 +239,7 @@ class StockVisualizer(Visualizer):
 
     def after_hours_trades(self):
         """
-        Visualize the effect of after hours trading on this asset.
+        Visualize the effect of after-hours trading on this asset.
 
         Returns:
             A matplotlib Axes object.
@@ -251,14 +251,14 @@ class StockVisualizer(Visualizer):
 
         after_hours.plot(
             ax=axes[0],
-            title='After hours trading\n(Open Price - Prior Day\'s Close)'
+            title='After-hours trading\n(Open Price - Prior Day\'s Close)'
         ).set_ylabel('price')
 
         monthly_effect.index = monthly_effect.index.strftime('%b')
         monthly_effect.plot(
             ax=axes[1],
             kind='bar',
-            title='After hours trading monthly effect',
+            title='After-hours trading monthly effect',
             color=np.where(monthly_effect >= 0, 'g', 'r'),
             rot=90
         ).axhline(0, color='black', linewidth=1)
