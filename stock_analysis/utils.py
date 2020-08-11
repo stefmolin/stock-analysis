@@ -55,11 +55,11 @@ def label_sanitizer(method):
 def validate_df(columns, instance_method=True):
     """
     Decorator that raises a `ValueError` if input isn't a pandas
-    DataFrame or doesn't contain the proper columns. Note the DataFrame
+    `DataFrame` or doesn't contain the proper columns. Note the `DataFrame`
     must be the first positional argument passed to this method.
 
     Parameters:
-        - columns: A set of column names that the dataframe must have.
+        - columns: A set of required column names.
                    For example, {'open', 'high', 'low', 'close'}.
         - instance_method: Whether or not the item being decorated is
                            an instance method. Pass `False` to decorate
@@ -75,7 +75,7 @@ def validate_df(columns, instance_method=True):
             # so self is the first positional argument in that case
             df = (self, *args)[0 if not instance_method else 1]
             if not isinstance(df, pd.DataFrame):
-                raise ValueError('Must pass in a pandas DataFrame')
+                raise ValueError('Must pass in a pandas `DataFrame`')
             if columns.difference(df.columns):
                 raise ValueError(
                     f'Dataframe must contain the following columns: {columns}'
@@ -94,7 +94,7 @@ def group_stocks(mapping):
         - mapping: A key-value mapping of the form { asset_name : asset_df }
 
     Returns:
-        A new pandas DataFrame
+        A new pandas `DataFrame`
     """
     group_df = pd.DataFrame()
 
