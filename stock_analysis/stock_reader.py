@@ -29,7 +29,7 @@ class StockReader:
                    if not provided.
 
         Returns:
-            A StockReader object.
+            A `StockReader` object.
         """
         self.start, self.end = map(
             lambda x: x.strftime('%Y%m%d') if isinstance(
@@ -58,7 +58,7 @@ class StockReader:
                          - 'NASDAQ' for NASDAQ Composite Index
 
         Returns:
-            The ticker as a string if known, otherwise None.
+            The ticker as a string if known, otherwise `None`.
         """
         try:
             index = index.upper()
@@ -77,7 +77,7 @@ class StockReader:
             - ticker: The stock symbol to lookup as a string.
 
         Returns:
-            A pandas dataframe with the stock data.
+            A pandas `DataFrame` with the stock data.
         """
         try:
             data = web.DataReader(ticker, 'iex', self.start, self.end)
@@ -94,7 +94,7 @@ class StockReader:
         Get bitcoin historical OHLC data from coinmarketcap.com for given date range.
 
         Returns:
-            A pandas dataframe with the bitcoin data.
+            A pandas `DataFrame` with the bitcoin data.
         """
         tables = pd.read_html(
             'https://coinmarketcap.com/'
@@ -134,7 +134,7 @@ class StockReader:
                     Check the `available_tickers` property for more.
 
         Returns:
-            A pandas dataframe with the index data.
+            A pandas `DataFrame` with the index data.
         """
         if index not in self.available_tickers:
             raise ValueError(
