@@ -48,7 +48,7 @@ class StockModeler:
             - i: The differenced order (q).
             - ma: The moving average order (d).
             - fit: Whether or not to return the fitted model,
-                   defaults to True.
+                   defaults to `True`.
 
         Returns:
             A statsmodels ARIMA object which you can use to fit and predict.
@@ -62,7 +62,7 @@ class StockModeler:
     @validate_df(columns={'close'}, instance_method=False)
     def arima_predictions(df, arima_model_fitted, start, end, plot=True, **kwargs):
         """
-        Get ARIMA predictions as pandas Series or plot.
+        Get ARIMA predictions as a `pandas.Series` or plot.
 
         Parameters:
             - df: The dataframe for the stock.
@@ -70,8 +70,8 @@ class StockModeler:
             - start: The start date for the predictions.
             - end: The end date for the predictions.
             - plot: Whether or not to plot the result, default is
-                    True meaning the plot is returned instead of the
-                    pandas Series containing the predictions.
+                    `True` meaning the plot is returned instead of the
+                    `pandas.Series` containing the predictions.
             - kwargs: Additional keyword arguments to pass to the pandas
                       `plot()` method.
 
@@ -115,7 +115,7 @@ class StockModeler:
     @validate_df(columns={'close'}, instance_method=False)
     def regression_predictions(df, model, start, end, plot=True, **kwargs):
         """
-        Get linear regression predictions as pandas Series or plot.
+        Get linear regression predictions as a `pandas.Series` or plot.
 
         Parameters:
             - df: The dataframe for the stock.
@@ -123,8 +123,8 @@ class StockModeler:
             - start: The start date for the predictions.
             - end: The end date for the predictions.
             - plot: Whether or not to plot the result, default is
-                    True meaning the plot is returned instead of the
-                    pandas Series containing the predictions.
+                    `True` meaning the plot is returned instead of the
+                    `pandas.Series` containing the predictions.
             - kwargs: Additional keyword arguments to pass to the pandas
                       `plot()` method.
 
