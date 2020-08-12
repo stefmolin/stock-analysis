@@ -15,7 +15,7 @@ class Visualizer:
 
     @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df):
-        """Visualizer has a pandas dataframe as an attribute."""
+        """Visualizer has a pandas `DataFrame` as an attribute."""
         self.data = df
 
     @staticmethod
@@ -46,7 +46,7 @@ class Visualizer:
             try:
                 if not x and not y:
                     raise ValueError(
-                        'You must provide an `x` or a `y` at a minimum!'
+                        'You must provide an `x` or a `y` at a minimum.'
                     )
                 elif x and not y:
                     # vertical line
@@ -56,7 +56,7 @@ class Visualizer:
                     ax.axhline(y, **kwargs)
             except:
                 raise ValueError(
-                    'If providing only `x` or `y`, it must be a single value'
+                    'If providing only `x` or `y`, it must be a single value.'
                 )
         ax.legend()
         return ax
@@ -80,7 +80,7 @@ class Visualizer:
         """
         if not x and not y:
             raise ValueError(
-                'You must provide an x or a y min/max tuple at a minimum!'
+                'You must provide an x or a y min/max tuple at a minimum.'
             )
         elif x and y:
             raise ValueError('You can only provide `x` or `y`.')
@@ -157,7 +157,7 @@ class Visualizer:
         raise NotImplementedError('To be implemented by subclasses.')
 
     def boxplot(self, **kwargs):
-        """To be implemented by subclasses for generating boxplots."""
+        """To be implemented by subclasses for generating box plots."""
         raise NotImplementedError('To be implemented by subclasses.')
 
     def histogram(self, column, **kwargs):
@@ -387,7 +387,7 @@ class StockVisualizer(Visualizer):
         Parameters:
             - other: The other asset's dataframe
             - column: The column name to use for the comparison.
-            - kwargs: Keyword arguments to pass down to `sns.pairplot()`
+            - kwargs: Keyword arguments to pass down to `sns.jointplot()`
 
         Returns:
             A seaborn jointplot
