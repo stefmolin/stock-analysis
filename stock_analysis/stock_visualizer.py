@@ -517,7 +517,8 @@ class AssetGroupVisualizer(Visualizer):
         """
         fig, axes = self._get_layout()
         for ax, (name, data) in zip(axes, self.data.groupby(self.group_by)):
-            sns.distplot(data[column], ax=ax, axlabel=f'{name} - {column}')
+            sns.histplot(data[column], kde=True, ax=ax)
+            ax.set_title(f'{name} - {column}')
         return axes
 
     def _window_calc_func(self, column, periods, name, func, named_arg, **kwargs):
