@@ -15,7 +15,7 @@ class Visualizer:
 
     @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df):
-        """Visualizer has a pandas `DataFrame` as an attribute."""
+        """Visualizer has a `pandas.DataFrame` object as an attribute."""
         self.data = df
 
     @staticmethod
@@ -24,7 +24,7 @@ class Visualizer:
         Static method for adding reference lines to plots.
 
         Parameters:
-            - ax: The matplotlib Axes object to add the reference line to.
+            - ax: The matplotlib `Axes` object to add the reference line to.
             - x, y: The x, y value to draw the line at as a
                     single value or numpy array-like structure.
                         - For horizontal: pass only `y`
@@ -35,7 +35,7 @@ class Visualizer:
                       function.
 
         Returns:
-            The Axes object passed in.
+            The matplotlib `Axes` object passed in.
         """
         try:
             # in case numpy array-like structures are passed -> AB line
@@ -67,7 +67,7 @@ class Visualizer:
         Static method for shading a region on a plot.
 
         Parameters:
-            - ax: The matplotlib Axes object to add the shaded region to.
+            - ax: The matplotlib `Axes` object to add the shaded region to.
             - x: Tuple with the `xmin` and `xmax` bounds for the rectangle
                  drawn vertically.
             - y: Tuple with the `ymin` and `ymax` bounds for the rectangle
@@ -76,7 +76,7 @@ class Visualizer:
                       function.
 
         Returns:
-            The Axes object passed in.
+            The matplotlib `Axes` object passed in.
         """
         if not x and not y:
             raise ValueError(
@@ -126,7 +126,7 @@ class Visualizer:
             - kwargs: Additional arguments to pass down to the plotting function.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         return self._window_calc_func(
             column, periods, name='MA',
@@ -144,7 +144,7 @@ class Visualizer:
             - kwargs: Additional arguments to pass down to the plotting function.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         return self._window_calc_func(
             column, periods, name='EWMA',
@@ -186,7 +186,7 @@ class StockVisualizer(Visualizer):
                       to the plotting function.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         return self.data.plot.line(y=column, **kwargs)
 
@@ -199,7 +199,7 @@ class StockVisualizer(Visualizer):
                       to the plotting function.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         return self.data.plot(kind='box', **kwargs)
 
@@ -213,7 +213,7 @@ class StockVisualizer(Visualizer):
                       to the plotting function.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         return self.data.plot.hist(y=column, **kwargs)
 
@@ -222,7 +222,7 @@ class StockVisualizer(Visualizer):
         Visualize the trade volume and closing price.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         fig, axes = plt.subplots(1, 2, figsize=(15, 4))
         self.data.close.plot(ax=axes[0]).set_ylabel('price')
@@ -242,7 +242,7 @@ class StockVisualizer(Visualizer):
         Visualize the effect of after-hours trading on this asset.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         after_hours = (self.data.open - self.data.close.shift())
 
@@ -279,7 +279,7 @@ class StockVisualizer(Visualizer):
             - legend_x: Where to place the legend below the plot.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         is_higher = y2 - y1 > 0
 
@@ -310,7 +310,7 @@ class StockVisualizer(Visualizer):
             - figsize: A tuple of (width, height) for the plot dimensions.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         axes = self.fill_between(
             self.data.open, self.data.close, figsize=figsize,
@@ -328,7 +328,7 @@ class StockVisualizer(Visualizer):
             - figsize: A tuple of (width, height) for the plot dimensions.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         axes = self.fill_between(
             other_df.open, self.data.close, figsize=figsize, legend_x=0.7,
@@ -353,7 +353,7 @@ class StockVisualizer(Visualizer):
             - kwargs: Additional arguments to pass down to the plotting function.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         ax = self.data.plot(y=column, **kwargs)
         for period in self._iter_handler(periods):
@@ -450,7 +450,7 @@ class AssetGroupVisualizer(Visualizer):
                       to the plotting function.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         if 'ax' not in kwargs:
             fig, ax = plt.subplots(1, 1, figsize=(10, 4))
@@ -475,7 +475,7 @@ class AssetGroupVisualizer(Visualizer):
                       to the plotting function.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         return sns.boxplot(
             x=self.group_by,
@@ -489,7 +489,7 @@ class AssetGroupVisualizer(Visualizer):
         Helper method for getting an autolayout of subplots (1 per group).
 
         Returns:
-            The matplotlib Figure and Axes objects to plot with.
+            The matplotlib `Figure` and `Axes` objects to plot with.
         """
         subplots_needed = self.data[self.group_by].nunique()
         rows = math.ceil(subplots_needed / 2)
@@ -513,7 +513,7 @@ class AssetGroupVisualizer(Visualizer):
                       to the plotting function.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         fig, axes = self._get_layout()
         for ax, (name, data) in zip(axes, self.data.groupby(self.group_by)):
@@ -537,7 +537,7 @@ class AssetGroupVisualizer(Visualizer):
             - kwargs: Additional arguments to pass down to the plotting function.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         fig, axes = self._get_layout()
         for ax, asset_name in zip(axes, self.data[self.group_by].unique()):
@@ -559,7 +559,7 @@ class AssetGroupVisualizer(Visualizer):
         Visualize the effect of after-hours trading on this asset.
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         num_categories = self.data[self.group_by].nunique()
         fig, axes = plt.subplots(
