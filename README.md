@@ -4,10 +4,10 @@ Package for making elements of technical analysis of a stock easier. This packag
 ## Setup
 ```shell
 # should install requirements.txt packages
-$ pip install -e stock-analysis # path to top level where setup.py is
+$ pip3 install -e stock-analysis # path to top level where setup.py is
 
 # if not, install them explicitly
-$ pip install -r requirements.txt
+$ pip3 install -r requirements.txt
 ```
 
 ## Usage
@@ -19,8 +19,8 @@ from stock_analysis import StockReader
 
 reader = StockReader('2017-01-01', '2018-12-31')
 
-# get bitcoin data
-bitcoin = reader.get_bitcoin_data()
+# get bitcoin data in USD
+bitcoin = reader.get_bitcoin_data('USD')
 
 # get faang data
 fb, aapl, amzn, nflx, goog = (
@@ -29,7 +29,7 @@ fb, aapl, amzn, nflx, goog = (
 )
 
 # get S&P 500 data
-sp = reader.get_index_data()
+sp = reader.get_index_data('S&P 500')
 ```
 
 ### Grouping data
@@ -38,11 +38,11 @@ from stock_analysis.utils import group_stocks, describe_group
 
 faang = group_stocks(
     {
-        'Facebook' : fb,
-        'Apple' : aapl,
-        'Amazon' : amzn,
-        'Netflix' : nflx,
-        'Google' : goog
+        'Facebook': fb,
+        'Apple': aapl,
+        'Amazon': amzn,
+        'Netflix': nflx,
+        'Google': goog
     }
 )
 
@@ -104,7 +104,7 @@ plt.show()
 ```
 <img src="images/nflx_vs_fb_closing_price.png?raw=true" align="center" width="600" alt="differential between NFLX and FB">
 
-*Note: run `help()` on the `StockVisualizer` for more visualizations*
+*Note: run `help()` on `StockVisualizer` for more visualizations*
 
 #### Asset groups
 Correlation heatmap:
@@ -117,7 +117,7 @@ faang_viz.heatmap(True)
 
 <img src="images/faang_heatmap.png?raw=true" align="center" width="450" alt="correlation heatmap">
 
-*Note: run `help()` on the `AssetGroupVisualizer` for more visualizations. This object has many of the visualizations of the `StockVisualizer`.*
+*Note: run `help()` on `AssetGroupVisualizer` for more visualizations. This object has many of the visualizations of the `StockVisualizer` class.*
 
 ### Analyzing data
 Below are a few of the metrics you can calculate.
@@ -131,7 +131,7 @@ nflx_analyzer.annualized_volatility()
 ```
 
 #### Asset group
-Methods of the `StockAnalyzer` can be accessed by name with the `AssetGroupAnalyzer`'s `analyze()` method.
+Methods of the `StockAnalyzer` class can be accessed by name with the `AssetGroupAnalyzer` class's `analyze()` method.
 ```python
 from stock_analysis import AssetGroupAnalyzer
 

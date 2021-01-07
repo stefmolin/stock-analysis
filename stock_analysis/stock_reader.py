@@ -12,14 +12,29 @@ class StockReader:
     """Class for reading financial data from websites."""
 
     _index_tickers = {
-        'SP500' : '^GSPC',
-        'DOW' : '^DJI',
-        'NASDAQ' : '^IXIC'
-    }
+        'S&P 500': '^GSPC', 'Dow Jones': '^DJI', 'NASDAQ': '^IXIC', # US
+        'S&P/TSX Composite Index': '^GSPTSE', # Canada
+        'IPC Mexico': '^MXX', # Mexico
+        'IBOVESPA': '^BVSP', # Brazil
+        'Euro Stoxx 50': '^STOXX50E', # Europe
+        'FTSE 100': '^FTSE', # UK
+        'CAC 40': '^FCHI', # France
+        'DAX': '^GDAXI', # Germany
+        'IBEX 35': '^IBEX', # Spain
+        'FTSE MIB': 'FTSEMIB.MI', # Italy
+        'OMX Stockholm 30': '^OMX', # Sweden
+        'Swiss Market Index': '^SSMI', # Switzerland
+        'Nikkei': '^N225', # Japan
+        'Hang Seng': '^HSI', # Hong Kong
+        'CSI 300': '000300.SS', # China
+        'S&P BSE SENSEX': '^BSESN', # India
+        'S&P/ASX 200': '^AXJO', # Australia
+        'MOEX Russia Index': '^IMOEX.ME' # Russia
+    } # to add more, consult https://finance.yahoo.com/world-indices/
 
     def __init__(self, start, end=None):
         """
-        Create a StockReader object for reading across a given date range.
+        Create a `StockReader` object for reading across a given date range.
 
         Parameters:
             - start: The first date to include, as a datetime object or
@@ -53,8 +68,8 @@ class StockReader:
         Parameters:
             - index: The name of the index; check `available_tickers`
                      property for full list which includes:
-                         - 'SP500' for S&P 500,
-                         - 'DOW' for Dow Jones Industrial Average,
+                         - 'S&P 500' for S&P 500,
+                         - 'Dow Jones' for Dow Jones Industrial Average,
                          - 'NASDAQ' for NASDAQ Composite Index
 
         Returns:
@@ -69,58 +84,34 @@ class StockReader:
     @label_sanitizer
     def get_ticker_data(self, ticker):
         """
-        Get historical OHLC data for given date range and ticker.
-        Tries to get from Investors Exchange (IEX), but falls back
-        to Yahoo! Finance if IEX doesn't have it.
+        Get historical OHLC data for given date range and ticker
+        from Yahoo! Finance.
 
         Parameter:
             - ticker: The stock symbol to lookup as a string.
 
         Returns:
-            A pandas `DataFrame` with the stock data.
+            A `pandas.DataFrame` with the stock data.
         """
-        try:
-            data = web.DataReader(ticker, 'iex', self.start, self.end)
-            data.index = pd.to_datetime(data.index)
-        except:
-            data = web.get_data_yahoo(
-                ticker, self.start, self.end
-            )
-        return data
+        return web.get_data_yahoo(ticker, self.start, self.end)
 
     @label_sanitizer
-    def get_bitcoin_data(self):
+    def get_bitcoin_data(self, currency_code):
         """
-        Get bitcoin historical OHLC data from coinmarketcap.com for given date range.
+        Get bitcoin historical OHLC data for given date range.
+
+        Parameter:
+            - currency_code: The currency to collect the bitcoin data 
+                             in, e.g. USD or GBP.
 
         Returns:
-            A pandas `DataFrame` with the bitcoin data.
+            A `pandas.DataFrame` with the bitcoin data.
         """
-        tables = pd.read_html(
-            'https://coinmarketcap.com/'
-            'currencies/bitcoin/historical-data/?'
-            'start={}&end{}'.format(self.start, self.end),
-            parse_dates=[0], index_col=[0]
-        )
-
-        # try to find the appropriate table on the page
-        for table in tables:
-            # we need 6 columns at least: date, open, high, low, close, volume
-            if table.shape[1] >= 6 and not table.empty:
-                # make sure the dates are correct (website doesn't respect end date)
-                # sort before slicing for bug in pandas v1.1.0: https://github.com/pandas-dev/pandas/issues/35509
-                df = table.sort_index()[self.start:self.end]
-                break
-        else:
-            raise ValueError('Unable to find the proper table')
-
-        if df.empty:
-            raise ValueError('No data found for that date range.')
-        return df
+        return self.get_ticker_data(f'BTC-{currency_code}').loc[self.start:self.end]
 
 
     @label_sanitizer
-    def get_index_data(self, index='SP500'):
+    def get_index_data(self, index):
         """
         Get historical OHLC data from Yahoo! Finance for the chosen index
         for given date range.
@@ -128,19 +119,17 @@ class StockReader:
         Parameter:
             - index: String representing the index you want data for,
                      supported indices include:
-                        - 'SP500' for S&P 500,
-                        - 'DOW' for Dow Jones Industrial Average,
+                        - 'S&P 500' for S&P 500,
+                        - 'Dow Jones' for Dow Jones Industrial Average,
                         - 'NASDAQ' for NASDAQ Composite Index
                     Check the `available_tickers` property for more.
 
         Returns:
-            A pandas `DataFrame` with the index data.
+            A `pandas.DataFrame` with the index data.
         """
         if index not in self.available_tickers:
             raise ValueError(
                 'Index not supported. '
                 f"Available tickers are: {', '.join(self.available_tickers)}"
             )
-        return web.get_data_yahoo(
-            self.get_index_ticker(index), self.start, self.end
-        )
+        return self.get_ticker_data(self.get_index_ticker(index))
