@@ -91,10 +91,10 @@ def group_stocks(mapping):
     the asset that row's data belongs to.
 
     Parameters:
-        - mapping: A key-value mapping of the form { asset_name : asset_df }
+        - mapping: A key-value mapping of the form {asset_name: asset_df}
 
     Returns:
-        A new pandas `DataFrame`
+        A new `pandas.DataFrame` object
     """
     group_df = pd.DataFrame()
 
