@@ -95,20 +95,6 @@ class StockReader:
         """
         return web.get_data_yahoo(ticker, self.start, self.end)
 
-    @label_sanitizer
-    def get_bitcoin_data(self, currency_code):
-        """
-        Get bitcoin historical OHLC data for given date range.
-
-        Parameter:
-            - currency_code: The currency to collect the bitcoin data 
-                             in, e.g. USD or GBP.
-
-        Returns:
-            A `pandas.DataFrame` with the bitcoin data.
-        """
-        return self.get_ticker_data(f'BTC-{currency_code}').loc[self.start:self.end]
-
 
     @label_sanitizer
     def get_index_data(self, index):
@@ -133,3 +119,18 @@ class StockReader:
                 f"Available tickers are: {', '.join(self.available_tickers)}"
             )
         return self.get_ticker_data(self.get_index_ticker(index))
+
+
+    @label_sanitizer
+    def get_bitcoin_data(self, currency_code):
+        """
+        Get bitcoin historical OHLC data for given date range.
+
+        Parameter:
+            - currency_code: The currency to collect the bitcoin data 
+                             in, e.g. USD or GBP.
+
+        Returns:
+            A `pandas.DataFrame` with the bitcoin data.
+        """
+        return self.get_ticker_data(f'BTC-{currency_code}').loc[self.start:self.end]
