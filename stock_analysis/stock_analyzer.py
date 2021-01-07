@@ -9,7 +9,7 @@ class StockAnalyzer:
 
     @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df):
-        """Create a `StockAnalyzer` by passing in a pandas DataFrame of OHLC data."""
+        """Create a `StockAnalyzer` object by passing in a `pandas.DataFrame` of OHLC data."""
         self.data = df
 
     @property
@@ -119,7 +119,7 @@ class StockAnalyzer:
                        will be used instead.
 
         Returns:
-            A pandas series.
+            A `pandas.Series` object.
         """
         periods = min(periods, self._max_periods)
         return self.close.rolling(periods).std() / math.sqrt(periods)
@@ -133,7 +133,7 @@ class StockAnalyzer:
             - other: The other dataframe.
 
         Returns:
-            A pandas series
+            A `pandas.Series`
         """
         return self.data.corrwith(other)
 
