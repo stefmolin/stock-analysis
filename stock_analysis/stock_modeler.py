@@ -31,7 +31,7 @@ class StockModeler:
                      ('additive', 'multiplicative')
 
         Returns:
-            A statsmodels decomposition object.
+            A `statsmodels` decomposition object.
         """
         return seasonal_decompose(df.close, model=model, period=period)
 
@@ -51,7 +51,7 @@ class StockModeler:
                    defaults to `True`.
 
         Returns:
-            A statsmodels ARIMA object which you can use to fit and predict.
+            A `statsmodels` ARIMA object which you can use to fit and predict.
         """
         arima_model = ARIMA(
             df.close.asfreq('B').fillna(method='ffill'), order=(ar, i, ma)
@@ -62,7 +62,7 @@ class StockModeler:
     @validate_df(columns={'close'}, instance_method=False)
     def arima_predictions(df, arima_model_fitted, start, end, plot=True, **kwargs):
         """
-        Get ARIMA predictions as a `pandas.Series` or plot.
+        Get ARIMA predictions as a `pandas.Series` object or plot.
 
         Parameters:
             - df: The dataframe for the stock.
@@ -71,13 +71,13 @@ class StockModeler:
             - end: The end date for the predictions.
             - plot: Whether or not to plot the result, default is
                     `True` meaning the plot is returned instead of the
-                    `pandas.Series` containing the predictions.
+                    `pandas.Series` object containing the predictions.
             - kwargs: Additional keyword arguments to pass to the pandas
                       `plot()` method.
 
         Returns:
-            A matplotlib Axes object or predictions as a Series
-            depending on the value of the `plot` argument.
+            A matplotlib `Axes` object or predictions as a `pandas.Series`
+            object depending on the value of the `plot` argument.
         """
         predicted_changes = arima_model_fitted.predict(
             start=start,
@@ -105,7 +105,7 @@ class StockModeler:
             - df: The dataframe with the stock data.
 
         Returns:
-            X, Y, and the fitted statsmodels linear regression
+            X, Y, and the fitted `statsmodels` linear regression
         """
         X = df.close.shift().dropna()
         Y = df.close[1:]
@@ -115,7 +115,7 @@ class StockModeler:
     @validate_df(columns={'close'}, instance_method=False)
     def regression_predictions(df, model, start, end, plot=True, **kwargs):
         """
-        Get linear regression predictions as a `pandas.Series` or plot.
+        Get linear regression predictions as a `pandas.Series` object or plot.
 
         Parameters:
             - df: The dataframe for the stock.
@@ -124,13 +124,13 @@ class StockModeler:
             - end: The end date for the predictions.
             - plot: Whether or not to plot the result, default is
                     `True` meaning the plot is returned instead of the
-                    `pandas.Series` containing the predictions.
+                    `pandas.Series` object containing the predictions.
             - kwargs: Additional keyword arguments to pass to the pandas
                       `plot()` method.
 
         Returns:
-            A matplotlib Axes object or predictions as a Series
-            depending on the value of the `plot` argument.
+            A matplotlib `Axes` object or predictions as a `pandas.Series`
+            object depending on the value of the `plot` argument.
         """
         predictions = pd.Series(
             index=pd.date_range(start, end),
@@ -164,7 +164,7 @@ class StockModeler:
                     Default is 'B' (business day).
 
         Returns:
-            A matplotlib Axes object.
+            A matplotlib `Axes` object.
         """
         fig, axes = plt.subplots(1, 2, figsize=(15, 5))
         residuals = pd.Series(
