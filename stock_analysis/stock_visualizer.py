@@ -254,7 +254,7 @@ class StockVisualizer(Visualizer):
             title='After-hours trading\n(Open Price - Prior Day\'s Close)'
         ).set_ylabel('price')
 
-        monthly_effect.index = monthly_effect.index.strftime('%b')
+        monthly_effect.index = monthly_effect.index.strftime('%Y-%b')
         monthly_effect.plot(
             ax=axes[1],
             kind='bar',
@@ -550,11 +550,12 @@ class AssetGroupVisualizer(Visualizer):
                     label=f'{period if isinstance(period, str) else str(period) + "D"} {name}'
                 )
             ax.legend()
+        plt.tight_layout()
         return ax
 
     def after_hours_trades(self):
         """
-        Visualize the effect of after-hours trading on this asset.
+        Visualize the effect of after-hours trading on this asset group.
 
         Returns:
             A matplotlib `Axes` object.
@@ -563,7 +564,7 @@ class AssetGroupVisualizer(Visualizer):
         fig, axes = plt.subplots(
             num_categories,
             2,
-            figsize=(15, 8 * num_categories)
+            figsize=(15, 3 * num_categories)
         )
 
         for ax, (name, data) in zip(axes, self.data.groupby(self.group_by)):
@@ -574,10 +575,9 @@ class AssetGroupVisualizer(Visualizer):
             after_hours.plot(
                 ax=ax[0],
                 title=f'{name} Open Price - Prior Day\'s Close'
-            )
-            ax[0].set_ylabel('price')
+            ).set_ylabel('price')
 
-            monthly_effect.index = monthly_effect.index.strftime('%b')
+            monthly_effect.index = monthly_effect.index.strftime('%Y-%b')
             monthly_effect.plot(
                 ax=ax[1],
                 kind='bar',
@@ -586,6 +586,7 @@ class AssetGroupVisualizer(Visualizer):
                 rot=90
             ).axhline(0, color='black', linewidth=1)
             ax[1].set_ylabel('price')
+        plt.tight_layout()
         return axes
 
     def pairplot(self, **kwargs):
