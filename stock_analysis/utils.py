@@ -130,4 +130,4 @@ def make_portfolio(data, date_column='date'):
     Note: the caller is responsible for making sure the dates line up across
     assets and handling when they don't.
     """
-    return data.reset_index().groupby('date').sum()
+    return data.reset_index().groupby(date_column).sum()
