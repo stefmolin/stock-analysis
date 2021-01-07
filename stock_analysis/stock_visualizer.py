@@ -312,12 +312,11 @@ class StockVisualizer(Visualizer):
         Returns:
             A matplotlib `Axes` object.
         """
-        axes = self.fill_between(
+        return self.fill_between(
             self.data.open, self.data.close, figsize=figsize,
             legend_x=0.67, title='Daily price change (open to close)',
             label_higher='price rose', label_lower='price fell'
         ).set_ylabel('price')
-        return axes
 
     def fill_between_other(self, other_df, figsize=(10, 4)):
         """
@@ -330,12 +329,11 @@ class StockVisualizer(Visualizer):
         Returns:
             A matplotlib `Axes` object.
         """
-        axes = self.fill_between(
+        return self.fill_between(
             other_df.open, self.data.close, figsize=figsize, legend_x=0.7,
             title='Differential between asset closing price (this - other)',
             label_higher='asset is higher', label_lower='asset is lower'
         ).set_ylabel('price')
-        return axes
 
     def _window_calc_func(self, column, periods, name, func, named_arg, **kwargs):
         """
