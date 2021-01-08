@@ -133,7 +133,7 @@ class StockAnalyzer:
             - other: The other dataframe.
 
         Returns:
-            A `pandas.Series`
+            A `pandas.Series` object.
         """
         return self.data.corrwith(other)
 
@@ -237,7 +237,7 @@ class AssetGroupAnalyzer:
     @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df, group_by='name'):
         """
-        Create an `AssetGroupAnalyzer` by passing in a pandas DataFrame
+        Create an `AssetGroupAnalyzer` object by passing in a `pandas.DataFrame`
         and column to group by.
         """
         self.data = df
