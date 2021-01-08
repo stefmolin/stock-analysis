@@ -2,7 +2,7 @@
 
 import matplotlib.pyplot as plt
 import pandas as pd
-from statsmodels.tsa.arima_model import ARIMA
+from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.seasonal import seasonal_decompose
 import statsmodels.api as sm
 
@@ -79,14 +79,7 @@ class StockModeler:
             A matplotlib `Axes` object or predictions as a `pandas.Series`
             object depending on the value of the `plot` argument.
         """
-        predicted_changes = arima_model_fitted.predict(
-            start=start,
-            end=end
-        )
-
-        predictions = pd.Series(
-            predicted_changes, name='close'
-        ).cumsum() + df.last('1D').close.iat[0]
+        predictions = arima_model_fitted.predict(start=start, end=end)
 
         if plot:
             ax = df.close.plot(**kwargs)
@@ -171,8 +164,7 @@ class StockModeler:
             model_fitted.resid.asfreq(freq), name='residuals'
         )
         residuals.plot(style='bo', ax=axes[0], title='Residuals')
-        axes[0].set_xlabel('Date')
-        axes[0].set_ylabel('Residual')
+        axes[0].set(xlabel='Date', ylabel='Residual')
         residuals.plot(kind='kde', ax=axes[1], title='Residuals KDE')
         axes[1].set_xlabel('Residual')
         return axes
