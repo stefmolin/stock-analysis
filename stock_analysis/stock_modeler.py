@@ -38,7 +38,7 @@ class StockModeler:
 
     @staticmethod
     @validate_df(columns={'close'}, instance_method=False)
-    def arima(df, *, ar, i, ma, fit=True):
+    def arima(df, *, ar, i, ma, fit=True, freq='B'):
         """
         Create an ARIMA object for modeling time series.
 
@@ -50,12 +50,13 @@ class StockModeler:
             - ma: The moving average order (d).
             - fit: Whether or not to return the fitted model,
                    defaults to `True`.
+            - freq: The frequency of the data. Default is 1 business day ('B').
 
         Returns:
             A `statsmodels` ARIMA object which you can use to fit and predict.
         """
         arima_model = ARIMA(
-            df.close.asfreq('B').fillna(method='ffill'), order=(ar, i, ma)
+            df.close.asfreq(freq).fillna(method='ffill'), order=(ar, i, ma)
         )
         return arima_model.fit() if fit else arima_model
 
