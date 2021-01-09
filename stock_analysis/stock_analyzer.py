@@ -275,6 +275,6 @@ class AssetGroupAnalyzer:
         if not kwargs:
             kwargs = {}
         return {
-            group: getattr(StockAnalyzer, func_name)(analyzer, **kwargs)
+            group: getattr(analyzer, func_name)(**kwargs)
             for group, analyzer in self.analyzers.items()
         }
