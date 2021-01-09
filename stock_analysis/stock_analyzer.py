@@ -4,6 +4,7 @@ import math
 
 from .utils import validate_df
 
+
 class StockAnalyzer:
     """Class for providing metrics for technical analysis of a stock."""
 
@@ -230,6 +231,7 @@ class StockAnalyzer:
         return (
             self.cumulative_returns().last('1D').iat[0] - r_f
         ) / self.cumulative_returns().std()
+
 
 class AssetGroupAnalyzer:
     """Analyzes many assets in a dataframe."""
