@@ -91,7 +91,7 @@ class StockReader:
             - ticker: The stock symbol to lookup as a string.
 
         Returns:
-            A `pandas.DataFrame` with the stock data.
+            A `pandas.DataFrame` object with the stock data.
         """
         return web.get_data_yahoo(ticker, self.start, self.end)
 
@@ -111,7 +111,7 @@ class StockReader:
                     Check the `available_tickers` property for more.
 
         Returns:
-            A `pandas.DataFrame` with the index data.
+            A `pandas.DataFrame` object with the index data.
         """
         if index not in self.available_tickers:
             raise ValueError(
@@ -131,6 +131,6 @@ class StockReader:
                              in, e.g. USD or GBP.
 
         Returns:
-            A `pandas.DataFrame` with the bitcoin data.
+            A `pandas.DataFrame` object with the bitcoin data.
         """
         return self.get_ticker_data(f'BTC-{currency_code}').loc[self.start:self.end]
