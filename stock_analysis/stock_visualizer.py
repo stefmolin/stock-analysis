@@ -434,7 +434,7 @@ class AssetGroupVisualizer(Visualizer):
 
     # override for group visuals
     def __init__(self, df, group_by='name'):
-        """This object keeps track of which column it needs to group by."""
+        """This object also keeps track of which column it needs to group by."""
         super().__init__(df)
         self.group_by = group_by
 
