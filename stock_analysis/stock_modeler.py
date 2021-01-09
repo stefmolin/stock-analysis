@@ -8,6 +8,7 @@ import statsmodels.api as sm
 
 from .utils import validate_df
 
+
 class StockModeler:
     """Static methods for modeling stocks."""
 
