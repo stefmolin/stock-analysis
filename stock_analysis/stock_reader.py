@@ -8,6 +8,7 @@ import pandas_datareader.data as web
 
 from .utils import label_sanitizer
 
+
 class StockReader:
     """Class for reading financial data from websites."""
 
