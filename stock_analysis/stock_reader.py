@@ -137,7 +137,7 @@ class StockReader:
 
     def get_risk_free_rate_of_return(self, last=True):
         """
-        Get the risk-free rate of return using the 10-year US treasury bill.
+        Get the risk-free rate of return using the 10-year US Treasury bill.
         Source: FRED (https://fred.stlouisfed.org/series/DGS10)
 
         Parameter:
