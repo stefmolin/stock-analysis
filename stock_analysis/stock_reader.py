@@ -133,3 +133,46 @@ class StockReader:
             A `pandas.DataFrame` object with the bitcoin data.
         """
         return self.get_ticker_data(f'BTC-{currency_code}').loc[self.start:self.end]
+
+
+    def get_risk_free_rate_of_return(self, last=True):
+        """
+        Get the risk-free rate of return using the 10-year US treasury bill.
+        Source: FRED (https://fred.stlouisfed.org/series/DGS10)
+
+        Parameter:
+            - last: If `True` (default), return the rate on the last date in the date range
+                    else, return a `Series` object for the rate each day in the date range.
+
+        Returns:
+            A single value or a `pandas.Series` object with the risk-free rate(s) of return.
+        """
+        data = web.DataReader('DGS10', 'fred', start=self.start, end=self.end)
+        data.index.rename('date', inplace=True)
+        data = data.squeeze()
+        return data.asof(self.end) if last and isinstance(data, pd.Series) else data
+
+
+    @label_sanitizer
+    def get_forex_rates(self, from_currency, to_currency, **kwargs):
+        """
+        Get daily foreign exchange rates from AlphaVantage.
+
+        Note: This requires an API key, which can be obtained for free at
+        https://www.alphavantage.co/support/#api-key. To use this method, you must either
+        store it as an environment variable called `ALPHAVANTAGE_API_KEY` or pass it in to
+        this method as `api_key`.
+
+        Parameters:
+            - from_currency: The currency you want the exchange rates for.
+            - to_currency: The target currency.
+
+        Returns:
+            A `pandas.DataFrame` with daily exchange rates.
+        """
+        data = web.DataReader(
+            f'{from_currency}/{to_currency}', 'av-forex-daily',
+            start=self.start, end=self.end, **kwargs
+        )
+        data.index.rename('date', inplace=True)
+        return data
