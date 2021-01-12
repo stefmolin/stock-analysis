@@ -104,6 +104,13 @@ plt.show()
 ```
 <img src="images/nflx_vs_fb_closing_price.png?raw=true" align="center" width="600" alt="differential between NFLX and FB">
 
+Candlestick plots with resampling (uses `mplfinance`):
+```python
+netflix_viz.candlestick(resample='2W', volume=True, xrotation=90, datetime_format='%Y-%b -')
+```
+
+<img src="images/candlestick.png?raw=true" align="center" width="600" alt="resampled candlestick plot">
+
 *Note: run `help()` on `StockVisualizer` for more visualizations*
 
 #### Asset groups
