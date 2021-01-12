@@ -97,7 +97,6 @@ class StockReader:
         return web.get_data_yahoo(ticker, self.start, self.end)
 
 
-    @label_sanitizer
     def get_index_data(self, index):
         """
         Get historical OHLC data from Yahoo! Finance for the chosen index
@@ -122,7 +121,6 @@ class StockReader:
         return self.get_ticker_data(self.get_index_ticker(index))
 
 
-    @label_sanitizer
     def get_bitcoin_data(self, currency_code):
         """
         Get bitcoin historical OHLC data for given date range.
