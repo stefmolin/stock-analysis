@@ -619,7 +619,7 @@ class AssetGroupVisualizer(Visualizer):
             **kwargs
         )
 
-    def heatmap(self, pct_change=False, **kwargs):
+    def heatmap(self, pct_change=True, **kwargs):
         """
         Generate a seaborn heatmap for correlations between assets.
 
