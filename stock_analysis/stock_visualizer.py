@@ -3,6 +3,7 @@
 import math
 
 import matplotlib.pyplot as plt
+import mplfinance as mpf
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -217,25 +218,32 @@ class StockVisualizer(Visualizer):
         """
         return self.data.plot.hist(y=column, **kwargs)
 
-    def trade_volume(self):
+    def candlestick(self, date_range=None, resample=None, volume=False, **kwargs):
         """
-        Visualize the trade volume and closing price.
+        Create a candlestick plot for the OHLC data with optional aggregation,
+        subset of the date range, and volume.
 
-        Returns:
-            A matplotlib `Axes` object.
+        Parameters:
+            - date_range: String or `slice()` of dates to pass to `loc[]`, if `None`
+                          the plot will be for the full range of the data.
+            - resample: The offset to use for resampling the data, if desired.
+            - volume: Whether to show a bar plot for volume traded under the candlesticks
+            - kwargs: Additional keyword arguments to pass down to `mplfinance.plot()`
+
+        Note: `mplfinance.plot()` doesn't return anything. To save your plot, pass in `savefig=file.png`.
         """
-        fig, axes = plt.subplots(1, 2, figsize=(15, 4))
-        self.data.close.plot(ax=axes[0]).set_ylabel('price')
-        monthly = self.data.volume.resample('1M').sum()
-        monthly.index = monthly.index.strftime('%Y-%b')
-        monthly.plot(
-            kind='bar', ax=axes[1]
-        ).set_ylabel('volume traded')
-        for ax in axes:
-            for spine in ['top', 'right']:
-                ax.spines[spine].set_visible(False)
-        fig.tight_layout()
-        return axes
+        if not date_range:
+            date_range = slice(self.data.index.min(), self.data.index.max())
+        plot_data = self.data.loc[date_range]
+
+        if resample:
+            plot_data = plot_data.resample(resample).agg({
+                'open': 'first', 'close': 'last',
+                'high': 'max', 'low': 'min', 'volume': 'sum'
+            })
+
+        mpf.plot(plot_data, type='candle', volume=volume, **kwargs)
+
 
     def after_hours_trades(self):
         """
