@@ -173,6 +173,6 @@ class StockReader:
         data = web.DataReader(
             f'{from_currency}/{to_currency}', 'av-forex-daily',
             start=self.start, end=self.end, **kwargs
-        )
+        ).rename(pd.to_datetime)
         data.index.rename('date', inplace=True)
         return data

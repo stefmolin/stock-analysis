@@ -237,10 +237,11 @@ class StockVisualizer(Visualizer):
         plot_data = self.data.loc[date_range]
 
         if resample:
-            plot_data = plot_data.resample(resample).agg({
+            agg_dict = {
                 'open': 'first', 'close': 'last',
                 'high': 'max', 'low': 'min', 'volume': 'sum'
-            })
+            }
+            plot_data = plot_data.resample(resample).agg({col: agg_dict[col] for col in plot_data.columns if col in agg_dict})
 
         mpf.plot(plot_data, type='candle', volume=volume, **kwargs)
 
