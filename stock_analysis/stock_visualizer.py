@@ -109,7 +109,7 @@ class Visualizer:
             items = [items]
         return items
 
-    def _window_calc_func(self, column, periods, name, func, named_arg, **kwargs):
+    def _window_calc(self, column, periods, name, func, named_arg, **kwargs):
         """
         To be implemented by subclasses. Defines how to add lines resulting
         from window calculations.
@@ -129,7 +129,7 @@ class Visualizer:
         Returns:
             A matplotlib `Axes` object.
         """
-        return self._window_calc_func(
+        return self._window_calc(
             column, periods, name='MA',
             func=pd.DataFrame.resample, named_arg='rule', **kwargs
         )
@@ -147,7 +147,7 @@ class Visualizer:
         Returns:
             A matplotlib `Axes` object.
         """
-        return self._window_calc_func(
+        return self._window_calc(
             column, periods, name='EWMA',
             func=pd.DataFrame.ewm, named_arg='span', **kwargs
         )
@@ -348,7 +348,7 @@ class StockVisualizer(Visualizer):
         ax.set_ylabel('price')
         return ax
 
-    def _window_calc_func(self, column, periods, name, func, named_arg, **kwargs):
+    def _window_calc(self, column, periods, name, func, named_arg, **kwargs):
         """
         Helper method for plotting a series and adding reference lines using
         a window calculation.
@@ -532,7 +532,7 @@ class AssetGroupVisualizer(Visualizer):
             ax.set_title(f'{name} - {column}')
         return axes
 
-    def _window_calc_func(self, column, periods, name, func, named_arg, **kwargs):
+    def _window_calc(self, column, periods, name, func, named_arg, **kwargs):
         """
         Helper method for plotting a series and adding reference lines using
         a window calculation.
