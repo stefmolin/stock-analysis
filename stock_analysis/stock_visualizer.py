@@ -614,7 +614,7 @@ class AssetGroupVisualizer(Visualizer):
         """
         return sns.pairplot(
             self.data.pivot_table(
-                values='close', index=self.data.index, columns='name'
+                values='close', index=self.data.index, columns=self.group_by
             ),
             diag_kind='kde',
             **kwargs
@@ -634,7 +634,7 @@ class AssetGroupVisualizer(Visualizer):
             A seaborn heatmap
         """
         pivot = self.data.pivot_table(
-            values='close', index=self.data.index, columns='name'
+            values='close', index=self.data.index, columns=self.group_by
         )
         if pct_change:
             pivot = pivot.pct_change()

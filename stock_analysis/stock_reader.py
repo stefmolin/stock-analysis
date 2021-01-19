@@ -48,9 +48,9 @@ class StockReader:
             A `StockReader` object.
         """
         self.start, self.end = map(
-            lambda x: x.strftime('%Y%m%d') if isinstance(
-                x, dt.date
-            ) else re.sub(r'\D', '', x),
+            lambda x: \
+                x.strftime('%Y%m%d') if isinstance(x, dt.date)\
+                else re.sub(r'\D', '', x),
             [start, end or dt.date.today()]
         )
         if self.start >= self.end:
