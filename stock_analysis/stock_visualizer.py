@@ -419,7 +419,7 @@ class StockVisualizer(Visualizer):
         Returns:
             A seaborn heatmap
         """
-        corrs = self.data.corrwith(other)
+        corrs = self.data.pct_change().corrwith(other.pct_change())
         corrs = corrs[~pd.isnull(corrs)]
         size = len(corrs)
         matrix = np.zeros((size, size), float)
