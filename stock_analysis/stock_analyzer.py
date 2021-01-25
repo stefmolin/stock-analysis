@@ -136,7 +136,7 @@ class StockAnalyzer:
         Returns:
             A `pandas.Series` object.
         """
-        return self.data.corrwith(other)
+        return self.data.pct_change().corrwith(other.pct_change())
 
     def cv(self):
         """
