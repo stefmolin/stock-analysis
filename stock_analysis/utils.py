@@ -123,11 +123,11 @@ def describe_group(data):
 
 
 @validate_df(columns=set(), instance_method=False)
-def make_portfolio(data, date_column='date'):
+def make_portfolio(data, date_level='date'):
     """
     Make a portfolio of assets by grouping by date and summing all columns.
 
     Note: the caller is responsible for making sure the dates line up across
     assets and handling when they don't.
     """
-    return data.groupby(level=date_column).sum()
+    return data.groupby(level=date_level).sum()
