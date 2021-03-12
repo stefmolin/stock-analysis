@@ -166,7 +166,7 @@ class Visualizer:
         raise NotImplementedError('To be implemented by subclasses.')
 
     def after_hours_trades(self):
-        """To be implemented by subclasses."""
+        """To be implemented by subclasses for showing the effect of after-hours trading."""
         raise NotImplementedError('To be implemented by subclasses.')
 
     def pairplot(self, **kwargs):
