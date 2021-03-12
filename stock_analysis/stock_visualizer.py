@@ -253,7 +253,7 @@ class StockVisualizer(Visualizer):
         Returns:
             A matplotlib `Axes` object.
         """
-        after_hours = (self.data.open - self.data.close.shift())
+        after_hours = self.data.open - self.data.close.shift()
 
         monthly_effect = after_hours.resample('1M').sum()
         fig, axes = plt.subplots(1, 2, figsize=(15, 3))
