@@ -581,7 +581,7 @@ class AssetGroupVisualizer(Visualizer):
         )
 
         for ax, (name, data) in zip(axes, self.data.groupby(self.group_by)):
-            after_hours = (data.open - data.close.shift())
+            after_hours = data.open - data.close.shift()
 
             monthly_effect = after_hours.resample('1M').sum()
 
