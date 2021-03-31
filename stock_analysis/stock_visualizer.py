@@ -72,7 +72,7 @@ class Visualizer:
             - x: Tuple with the `xmin` and `xmax` bounds for the rectangle
                  drawn vertically.
             - y: Tuple with the `ymin` and `ymax` bounds for the rectangle
-                 drawn vertically.
+                 drawn horizontally.
             - kwargs: Additional keyword arguments to pass to the plotting
                       function.
 
@@ -410,7 +410,7 @@ class StockVisualizer(Visualizer):
         )
     def correlation_heatmap(self, other):
         """
-        Plot the correlations between the same column between this asset and
+        Plot the correlations between this asset and
         another one with a heatmap.
 
         Parameters:

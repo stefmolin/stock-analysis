@@ -14,7 +14,7 @@ class StockModeler:
 
     def __init__(self):
         raise NotImplementedError(
-            "This class must used statically, don't instantiate it."
+            "This class must used statically; don't instantiate it."
         )
 
     @staticmethod
