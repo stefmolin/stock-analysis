@@ -133,7 +133,7 @@ class StockModeler:
         )
         last = df.last('1D').close
         for i, date in enumerate(predictions.index):
-            if i == 0:
+            if not i:
                 pred = model.predict(last)
             else:
                 pred = model.predict(predictions.iloc[i - 1])
