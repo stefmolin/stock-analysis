@@ -1,4 +1,4 @@
-"""Gathering select stock data."""
+"""Gather select stock data."""
 
 import datetime as dt
 import re
