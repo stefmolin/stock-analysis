@@ -313,7 +313,7 @@ class StockVisualizer(Visualizer):
 
     def open_to_close(self, figsize=(10, 4)):
         """
-        Visualize the daily change from open to close price.
+        Visualize the daily change in price from open to close.
 
         Parameters:
             - figsize: A tuple of (width, height) for the plot dimensions.
