@@ -78,7 +78,7 @@ def validate_df(columns, instance_method=True):
                 raise ValueError('Must pass in a pandas `DataFrame`')
             if columns.difference(df.columns):
                 raise ValueError(
-                    f'Dataframe must contain the following columns: {columns}'
+                    f'DataFrame must contain the following columns: {columns}'
                 )
             return method(self, *args, **kwargs)
         return validate_wrapper
