@@ -1,8 +1,6 @@
 """Utility functions for stock analysis."""
-
 from functools import wraps
 import re
-
 import pandas as pd
 
 
