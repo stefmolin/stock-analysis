@@ -106,7 +106,7 @@ class Visualizer:
             The input as a list or tuple.
         """
         if not isinstance(items, (list, tuple)):
-            items = [items]
+            items = list(items)
         return items
 
     def _window_calc(self, column, periods, name, func, named_arg, **kwargs):
@@ -241,7 +241,7 @@ class StockVisualizer(Visualizer):
                 'open': 'first', 'close': 'last',
                 'high': 'max', 'low': 'min', 'volume': 'sum'
             }
-            plot_data = plot_data.resample(resample).agg({col: agg_dict[col] for col in plot_data.columns if col in agg_dict})
+            plot_data = plot_data.resample(resample).agg(dict((col, agg_dict[col]) for col in plot_data.columns if col in agg_dict))
 
         mpf.plot(plot_data, type='candle', volume=volume, **kwargs)
 
