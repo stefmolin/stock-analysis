@@ -1,17 +1,13 @@
 """Gather select stock data."""
-
 import datetime as dt
 import re
-
 import pandas as pd
 import pandas_datareader.data as web
-
 from .utils import label_sanitizer
 
 
 class StockReader:
     """Class for reading financial data from websites."""
-
     _index_tickers = {
         'S&P 500': '^GSPC', 'Dow Jones': '^DJI', 'NASDAQ': '^IXIC', # US
         'S&P/TSX Composite Index': '^GSPTSE', # Canada
@@ -96,7 +92,6 @@ class StockReader:
         """
         return web.get_data_yahoo(ticker, self.start, self.end)
 
-
     def get_index_data(self, index):
         """
         Get historical OHLC data from Yahoo! Finance for the chosen index
@@ -120,7 +115,6 @@ class StockReader:
             )
         return self.get_ticker_data(self.get_index_ticker(index))
 
-
     def get_bitcoin_data(self, currency_code):
         """
         Get bitcoin historical OHLC data for given date range.
@@ -134,24 +128,25 @@ class StockReader:
         """
         return self.get_ticker_data(f'BTC-{currency_code}').loc[self.start:self.end]
 
-
     def get_risk_free_rate_of_return(self, last=True):
         """
         Get the risk-free rate of return using the 10-year US Treasury bill.
         Source: FRED (https://fred.stlouisfed.org/series/DGS10)
 
         Parameter:
-            - last: If `True` (default), return the rate on the last date in the date range
-                    else, return a `Series` object for the rate each day in the date range.
+            - last: If `True` (default), return the rate on the last date 
+                    in the date range
+                    else, return a `Series` object for the rate each day 
+                    in the date range.
 
         Returns:
-            A single value or a `pandas.Series` object with the risk-free rate(s) of return.
+            A single value or a `pandas.Series` object with 
+            the risk-free rate(s) of return.
         """
         data = web.DataReader('DGS10', 'fred', start=self.start, end=self.end)
         data.index.rename('date', inplace=True)
         data = data.squeeze()
         return data.asof(self.end) if last and isinstance(data, pd.Series) else data
-
 
     @label_sanitizer
     def get_forex_rates(self, from_currency, to_currency, **kwargs):
@@ -159,8 +154,9 @@ class StockReader:
         Get daily foreign exchange rates from AlphaVantage.
 
         Note: This requires an API key, which can be obtained for free at
-        https://www.alphavantage.co/support/#api-key. To use this method, you must either
-        store it as an environment variable called `ALPHAVANTAGE_API_KEY` or pass it in to
+        https://www.alphavantage.co/support/#api-key. 
+        To use this method, you must either store it as an 
+        environment variable called `ALPHAVANTAGE_API_KEY` or pass it in to
         this method as `api_key`.
 
         Parameters:
