@@ -46,11 +46,9 @@ class Visualizer:
                         'You must provide an `x` or a `y` at a minimum.'
                     )
                 elif x and not y:
-                    # vertical line
-                    ax.axvline(x, **kwargs)
+                    ax.axvline(x, **kwargs) # Vertical line
                 elif not x and y:
-                    # horizontal line
-                    ax.axhline(y, **kwargs)
+                    ax.axhline(y, **kwargs) # Horizontal line
             except:
                 raise ValueError(
                     'If providing only `x` or `y`, it must be a single value.'
@@ -82,11 +80,9 @@ class Visualizer:
         elif x and y:
             raise ValueError('You can only provide `x` or `y`.')
         elif x and not y:
-            # vertical span
-            ax.axvspan(*x, **kwargs)
+            ax.axvspan(*x, **kwargs) # Vertical span
         elif not x and y:
-            # horizontal span
-            ax.axhspan(*y, **kwargs)
+            ax.axhspan(*y, **kwargs) # Horizontal span
         return ax
 
     @staticmethod
@@ -490,8 +486,7 @@ class StockVisualizer(Visualizer):
         )
         for i, corr in zip(range(size), corrs):
             matrix[i][i] = corr
-        # create mask to only show diagonal
-        mask = np.ones_like(matrix)
+        mask = np.ones_like(matrix) # Create mask to only show diagonal
         np.fill_diagonal(mask, 0)
         return sns.heatmap(
             matrix,
@@ -507,7 +502,6 @@ class StockVisualizer(Visualizer):
 
 class AssetGroupVisualizer(Visualizer):
     """Class for visualizing groups of assets in a single dataframe."""
-    # override for group visuals
     def __init__(self, df, group_by='name'):
         """This object also keeps track of which column it needs to group by."""
         super().__init__(df)
@@ -580,8 +574,7 @@ class AssetGroupVisualizer(Visualizer):
         if subplots_needed < len(axes):
             # remove excess axes from autolayout
             for i in range(subplots_needed, len(axes)):
-                # can't use comprehension here
-                fig.delaxes(axes[i])
+                fig.delaxes(axes[i]) # Can't use list comprehension here
         return fig, axes
 
     def histogram(self, column, **kwargs):
