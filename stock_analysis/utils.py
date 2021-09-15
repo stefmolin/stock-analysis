@@ -33,16 +33,13 @@ def label_sanitizer(method):
     Returns:
         A decorated method or function.
     """
-    # keep the docstring of the data method for help()
     @wraps(method)
     def method_wrapper(self, *args, **kwargs):
         df = method(self, *args, **kwargs)
-        # fix the column names
         df.columns = list(
             _sanitize_label(col) 
             for col in df.columns
         )
-        # fix the index name
         df.index.rename(
             _sanitize_label(df.index.name),
             inplace=True
@@ -70,8 +67,6 @@ def validate_df(columns, instance_method=True):
     def method_wrapper(method):
         @wraps(method)
         def validate_wrapper(self, *args, **kwargs):
-            # functions and static methods don't pass self
-            # so self is the first positional argument in that case
             df = (self, *args)[0 if not instance_method else 1]
             if not isinstance(df, pd.DataFrame):
                 raise ValueError(
