@@ -274,7 +274,10 @@ class AssetGroupAnalyzer:
             raise ValueError(f'StockAnalyzer has no "{func_name}" method.')
         if not kwargs:
             kwargs = {}
-        return {
-            group: getattr(analyzer, func_name)(**kwargs)
+        return dict(
+            (
+                group, 
+                getattr(analyzer, func_name)(**kwargs)
+            )
             for group, analyzer in self.analyzers.items()
-        }
+        )
