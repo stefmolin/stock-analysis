@@ -1,17 +1,14 @@
 """Simple time series modeling for stocks."""
-
 import matplotlib.pyplot as plt
 import pandas as pd
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.seasonal import seasonal_decompose
 import statsmodels.api as sm
-
 from .utils import validate_df
 
 
 class StockModeler:
     """Static methods for modeling stocks."""
-
     def __init__(self):
         raise NotImplementedError(
             "This class must used statically; don't instantiate it."
@@ -82,12 +79,10 @@ class StockModeler:
             object depending on the value of the `plot` argument.
         """
         predictions = arima_model_fitted.predict(start=start, end=end)
-
         if plot:
             ax = df.close.plot(**kwargs)
             predictions.plot(ax=ax, style='r:', label='arima predictions')
             ax.legend()
-
         return ax if plot else predictions
 
     @staticmethod
@@ -138,14 +133,12 @@ class StockModeler:
             else:
                 pred = model.predict(predictions.iloc[i - 1])
             predictions.loc[date] = pred[0]
-
         if plot:
             ax = df.close.plot(**kwargs)
             predictions.plot(
                 ax=ax, style='r:', label='regression predictions'
             )
             ax.legend()
-
         return ax if plot else predictions
 
     @staticmethod
