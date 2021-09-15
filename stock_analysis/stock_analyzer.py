@@ -35,17 +35,26 @@ class StockAnalyzer:
     @property
     def last_close(self):
         """Get the value of the last close in the data."""
-        return self.data.last('1D').close.iat[0]
+        return self.data\
+            .last('1D')\
+            .close\
+            .iat[0]
 
     @property
     def last_high(self):
         """Get the value of the last high in the data."""
-        return self.data.last('1D').high.iat[0]
+        return self.data\
+            .last('1D')\
+            .high\
+            .iat[0]
 
     @property
     def last_low(self):
         """Get the value of the last low in the data."""
-        return self.data.last('1D').low.iat[0]
+        return self.data\
+            .last('1D')\
+            .low\
+            .iat[0]
 
     def resistance(self, level=1):
         """
@@ -101,7 +110,8 @@ class StockAnalyzer:
         Returns:
             The standard deviation
         """
-        return self.pct_change[min(periods, self._max_periods) * -1:].std()
+        validPeriods = min(periods, self._max_periods) * -1
+        return self.pct_change[validPeriods:].std()
 
     def annualized_volatility(self):
         """Calculate the annualized volatility."""
@@ -121,8 +131,12 @@ class StockAnalyzer:
         Returns:
             A `pandas.Series` object.
         """
-        periods = min(periods, self._max_periods)
-        return self.close.rolling(periods).std() / math.sqrt(periods)
+        validPeriods = min(periods, self._max_periods)
+        numerator = self.close\
+            .rolling(validPeriods)\
+            .std()
+        denominator = math.sqrt(validPeriods)
+        return numerator / denominator
 
     def corr_with(self, other):
         """
@@ -135,7 +149,10 @@ class StockAnalyzer:
         Returns:
             A `pandas.Series` object.
         """
-        return self.data.pct_change().corrwith(other.pct_change())
+        return self.data.pct_change()\
+            .corrwith(
+                other.pct_change()
+            )
 
     def cv(self):
         """
@@ -159,9 +176,12 @@ class StockAnalyzer:
         Returns:
             Beta, a float.
         """
-        index_change = index.close.pct_change()
-        beta = self.pct_change.cov(index_change) / index_change.var()
-        return beta
+        numerator = self.pct_change\
+            .cov(
+                index.close.pct_change()
+            )
+        denominator = index.close.pct_change().var()
+        return numerator / denominator
 
     def cumulative_returns(self):
         """Calculate the series of cumulative returns for plotting."""
@@ -178,7 +198,8 @@ class StockAnalyzer:
         Returns:
             The return, as a float.
         """
-        start, end = df.close[0], df.close[-1]
+        start =  df.close[0]
+        end = df.close[-1]
         return (end - start) / start
 
     def alpha(self, index, r_f):
@@ -196,26 +217,27 @@ class StockAnalyzer:
         Returns:
             Alpha, as a float.
         """
+        r = self.portfolio_return(self.data)
         r_f /= 100
         r_m = self.portfolio_return(index)
         beta = self.beta(index)
-        r = self.portfolio_return(self.data)
-        alpha = r - r_f - beta * (r_m - r_f)
-        return alpha
+        return r - r_f - beta * (r_m - r_f)
 
     def is_bear_market(self):
         """
         Determine if a stock is in a bear market, meaning its
         return in the last 2 months is a decline of 20% or more.
         """
-        return self.portfolio_return(self.data.last('2M')) <= -.2
+        validPeriod = self.data.last('2M')
+        return self.portfolio_return(validPeriod) <= -0.2
 
     def is_bull_market(self):
         """
         Determine if a stock is in a bull market, meaning its
         return in the last 2 months is an increase of 20% or more.
         """
-        return self.portfolio_return(self.data.last('2M')) >= .2
+        validPeriod = self.data.last('2M')
+        return self.portfolio_return(validPeriod) >= 0.2
 
     def sharpe_ratio(self, r_f):
         """
@@ -231,9 +253,9 @@ class StockAnalyzer:
         Returns:
             The Sharpe ratio, as a float.
         """
-        return (
-            self.cumulative_returns().last('1D').iat[0] - r_f
-        ) / self.cumulative_returns().std()
+        numerator = self.cumulative_returns().last('1D').iat[0] - r_f
+        denominator = self.cumulative_returns().std()
+        return numerator / denominator
 
 
 class AssetGroupAnalyzer:
@@ -242,12 +264,13 @@ class AssetGroupAnalyzer:
     def __init__(self, df, group_by='name'):
         """
         Create an `AssetGroupAnalyzer` object by passing in 
-        a `pandas.DataFrame`
-        and column to group by.
+        a `pandas.DataFrame` and column to group by.
         """
         self.data = df
         if group_by not in self.data.columns:
-            raise ValueError(f'`group_by` column "{group_by}" not in dataframe.')
+            raise ValueError(
+                f'`group_by` column "{group_by}" not in dataframe.'
+            )
         self.group_by = group_by
         self.analyzers = self._composition_handler()
 
@@ -274,7 +297,9 @@ class AssetGroupAnalyzer:
             calculation of that function.
         """
         if not hasattr(StockAnalyzer, func_name):
-            raise ValueError(f'StockAnalyzer has no "{func_name}" method.')
+            raise ValueError(
+                f'StockAnalyzer has no "{func_name}" method.'
+            )
         if not kwargs:
             kwargs = {}
         return dict(
