@@ -48,7 +48,7 @@ class StockReader:
                 x.strftime('%Y%m%d') \
                 if isinstance(x, dt.date) else \
                 re.sub(r'\D', '', x),
-            [start, end or dt.date.today()]
+            list(start, end or dt.date.today())
         )
         if self.start >= self.end:
             raise ValueError('`start` must be before `end`')
