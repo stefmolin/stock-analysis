@@ -116,10 +116,9 @@ class StockModeler:
         """
         X = df.close.shift().dropna()
         Y = df.close[1:]
-        return \
-            X, \
-            Y, \
-            sm.OLS(Y, X).fit()
+        lr_model = sm.OLS(Y, X).fit()
+        return X, Y, lr_model
+            
 
     @staticmethod
     @validate_df(columns={'close'}, instance_method=False)
