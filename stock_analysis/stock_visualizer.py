@@ -120,7 +120,8 @@ class Visualizer:
             - column: The name of the column to plot.
             - periods: The rule or list of rules for resampling,
                        like '20D' for 20-day periods.
-            - kwargs: Additional arguments to pass down to the plotting function.
+            - kwargs: Additional arguments to pass down 
+                      to the plotting function.
 
         Returns:
             A matplotlib `Axes` object.
@@ -138,7 +139,8 @@ class Visualizer:
             - column: The name of the column to plot.
             - periods: The span or list of spans for smoothing,
                        like 20 for 20-day periods.
-            - kwargs: Additional arguments to pass down to the plotting function.
+            - kwargs: Additional arguments to pass down 
+                      to the plotting function.
 
         Returns:
             A matplotlib `Axes` object.
@@ -162,7 +164,8 @@ class Visualizer:
         raise NotImplementedError('To be implemented by subclasses.')
 
     def after_hours_trades(self):
-        """To be implemented by subclasses for showing the effect of after-hours trading."""
+        """To be implemented by subclasses for showing the effect 
+        of after-hours trading."""
         raise NotImplementedError('To be implemented by subclasses.')
 
     def pairplot(self, **kwargs):
@@ -219,13 +222,17 @@ class StockVisualizer(Visualizer):
         subset of the date range, and volume.
 
         Parameters:
-            - date_range: String or `slice()` of dates to pass to `loc[]`, if `None`
+            - date_range: String or `slice()` of dates to pass to `loc[]`, 
+                          if `None`
                           the plot will be for the full range of the data.
             - resample: The offset to use for resampling the data, if desired.
-            - volume: Whether to show a bar plot for volume traded under the candlesticks
-            - kwargs: Additional keyword arguments to pass down to `mplfinance.plot()`
+            - volume: Whether to show a bar plot for volume traded 
+                      under the candlesticks
+            - kwargs: Additional keyword arguments to pass down 
+                      to `mplfinance.plot()`
 
-        Note: `mplfinance.plot()` doesn't return anything. To save your plot, pass in `savefig=file.png`.
+        Note: `mplfinance.plot()` doesn't return anything. 
+              To save your plot, pass in `savefig=file.png`.
         """
         if not date_range:
             date_range = slice(self.data.index.min(), self.data.index.max())
@@ -344,7 +351,8 @@ class StockVisualizer(Visualizer):
         Parameters:
             - column: The name of the column to plot.
             - periods: The rule/span or list of them to pass to the
-                       resampling/smoothing function, like '20D' for 20-day periods
+                       resampling/smoothing function, like '20D' 
+                       for 20-day periods
                        (for resampling) or 20 for a 20-day span (smoothing)
             - name: The name of the window calculation (to show in the legend).
             - func: The window calculation function.
@@ -527,7 +535,8 @@ class AssetGroupVisualizer(Visualizer):
         Parameters:
             - column: The name of the column to plot.
             - periods: The rule/span or list of them to pass to the
-                       resampling/smoothing function, like '20D' for 20-day periods
+                       resampling/smoothing function, like '20D' 
+                       for 20-day periods
                        (for resampling) or 20 for a 20-day span (smoothing)
             - name: The name of the window calculation (to show in the legend).
             - func: The window calculation function.
