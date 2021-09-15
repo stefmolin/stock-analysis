@@ -39,9 +39,10 @@ def label_sanitizer(method):
         df = method(self, *args, **kwargs)
 
         # fix the column names
-        df.columns = [
-            _sanitize_label(col) for col in df.columns
-        ]
+        df.columns = list(
+            _sanitize_label(col) 
+            for col in df.columns
+        )
 
         # fix the index name
         df.index.rename(
