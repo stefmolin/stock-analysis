@@ -31,7 +31,11 @@ class StockModeler:
         Returns:
             A `statsmodels` decomposition object.
         """
-        return seasonal_decompose(df.close, model=model, period=period)
+        return seasonal_decompose(
+            df.close, 
+            model=model, 
+            period=period
+        )
 
     @staticmethod
     @validate_df(columns={'close'}, instance_method=False)
@@ -53,9 +57,15 @@ class StockModeler:
             A `statsmodels` ARIMA object which you can use to fit and predict.
         """
         arima_model = ARIMA(
-            df.close.asfreq(freq).fillna(method='ffill'), order=(ar, i, ma)
+            df.close\
+                .asfreq(freq)\
+                .fillna(method='ffill'), 
+            order=(ar, i, ma)
         )
-        return arima_model.fit() if fit else arima_model
+        return \
+            arima_model.fit() \
+            if fit else \
+            arima_model
 
     @staticmethod
     @validate_df(columns={'close'}, instance_method=False)
@@ -78,10 +88,17 @@ class StockModeler:
             A matplotlib `Axes` object or predictions as a `pandas.Series`
             object depending on the value of the `plot` argument.
         """
-        predictions = arima_model_fitted.predict(start=start, end=end)
+        predictions = arima_model_fitted.predict(
+            start=start, 
+            end=end
+        )
         if plot:
             ax = df.close.plot(**kwargs)
-            predictions.plot(ax=ax, style='r:', label='arima predictions')
+            predictions.plot(
+                ax=ax, 
+                style='r:', 
+                label='arima predictions'
+            )
             ax.legend()
         return ax if plot else predictions
 
@@ -99,7 +116,10 @@ class StockModeler:
         """
         X = df.close.shift().dropna()
         Y = df.close[1:]
-        return X, Y, sm.OLS(Y, X).fit()
+        return \
+            X, \
+            Y, \
+            sm.OLS(Y, X).fit()
 
     @staticmethod
     @validate_df(columns={'close'}, instance_method=False)
@@ -136,7 +156,9 @@ class StockModeler:
         if plot:
             ax = df.close.plot(**kwargs)
             predictions.plot(
-                ax=ax, style='r:', label='regression predictions'
+                ax=ax, 
+                style='r:', 
+                label='regression predictions'
             )
             ax.legend()
         return ax if plot else predictions
@@ -154,12 +176,24 @@ class StockModeler:
         Returns:
             A matplotlib `Axes` object.
         """
-        fig, axes = plt.subplots(1, 2, figsize=(15, 5))
-        residuals = pd.Series(
-            model_fitted.resid.asfreq(freq), name='residuals'
+        fig, axes = plt.subplots(
+            1, 
+            2, 
+            figsize=(15, 5)
         )
-        residuals.plot(style='bo', ax=axes[0], title='Residuals')
-        axes[0].set(xlabel='Date', ylabel='Residual')
+        residuals = pd.Series(
+            model_fitted.resid.asfreq(freq), 
+            name='residuals'
+        )
+        residuals.plot(
+            style='bo', 
+            ax=axes[0], 
+            title='Residuals'
+        )
+        axes[0].set(
+            xlabel='Date', 
+            ylabel='Residual'
+        )
         residuals.plot(kind='kde', ax=axes[1], title='Residuals KDE')
         axes[1].set_xlabel('Residual')
         return axes
