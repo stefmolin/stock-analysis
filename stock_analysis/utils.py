@@ -37,13 +37,11 @@ def label_sanitizer(method):
     @wraps(method)
     def method_wrapper(self, *args, **kwargs):
         df = method(self, *args, **kwargs)
-
         # fix the column names
         df.columns = list(
             _sanitize_label(col) 
             for col in df.columns
         )
-
         # fix the index name
         df.index.rename(
             _sanitize_label(df.index.name),
@@ -98,14 +96,11 @@ def group_stocks(mapping):
         A new `pandas.DataFrame` object
     """
     group_df = pd.DataFrame()
-
     for stock, stock_data in mapping.items():
         df = stock_data.copy(deep=True)
         df['name'] = stock
         group_df = group_df.append(df, sort=True)
-
     group_df.index = pd.to_datetime(group_df.index)
-
     return group_df
 
 
