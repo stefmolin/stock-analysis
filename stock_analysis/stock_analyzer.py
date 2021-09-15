@@ -1,13 +1,10 @@
 """Classes for technical analysis of assets."""
-
 import math
-
 from .utils import validate_df
 
 
 class StockAnalyzer:
     """Class for providing metrics for technical analysis of a stock."""
-
     @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df):
         """Create a `StockAnalyzer` object by passing in a `pandas.DataFrame` of OHLC data."""
@@ -235,7 +232,6 @@ class StockAnalyzer:
 
 class AssetGroupAnalyzer:
     """Analyzes many assets in a dataframe."""
-
     @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df, group_by='name'):
         """
