@@ -15,8 +15,10 @@ def _sanitize_label(label):
     Returns:
         The sanitized label.
     """
-    return re.sub(r'[^\w\s]', '', label).lower().replace(' ', '_')
-
+    return re\
+        .sub(r'[^\w\s]', '', label)\
+        .lower()\
+        .replace(' ', '_')
 
 def label_sanitizer(method):
     """
@@ -72,7 +74,9 @@ def validate_df(columns, instance_method=True):
             # so self is the first positional argument in that case
             df = (self, *args)[0 if not instance_method else 1]
             if not isinstance(df, pd.DataFrame):
-                raise ValueError('Must pass in a pandas `DataFrame`')
+                raise ValueError(
+                    'Must pass in a pandas `DataFrame`'
+                )
             if columns.difference(df.columns):
                 raise ValueError(
                     f'DataFrame must contain the following columns: {columns}'
@@ -113,7 +117,10 @@ def describe_group(data):
     Returns:
         The transpose of the grouped description statistics.
     """
-    return data.groupby('name').describe().T
+    return data\
+        .groupby('name')\
+        .describe()\
+        .T
 
 
 @validate_df(columns=set(), instance_method=False)
@@ -124,4 +131,6 @@ def make_portfolio(data, date_level='date'):
     Note: the caller is responsible for making sure the dates line up across
     assets and handling when they don't.
     """
-    return data.groupby(level=date_level).sum()
+    return data\
+        .groupby(level=date_level)\
+        .sum()
