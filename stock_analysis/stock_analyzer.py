@@ -7,12 +7,14 @@ class StockAnalyzer:
     """Class for providing metrics for technical analysis of a stock."""
     @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df):
-        """Create a `StockAnalyzer` object by passing in a `pandas.DataFrame` of OHLC data."""
+        """Create a `StockAnalyzer` object by passing in 
+        a `pandas.DataFrame` of OHLC data."""
         self.data = df
 
     @property
     def _max_periods(self):
-        """Get the maximum number of trading periods that can be used in calculations."""
+        """Get the maximum number of trading periods that can be used 
+        in calculations."""
         return self.data.shape[0]
 
     @property
@@ -186,7 +188,9 @@ class StockAnalyzer:
         Parameters:
             - index: The index to compare to.
             - r_f: The risk-free rate of return.
-                   Consult https://www.treasury.gov/resource-center/data-chart-center/interest-rates/pages/TextView.aspx?data=yield
+                   Consult 
+                   https://www.treasury.gov/resource-center/data-chart-center/
+                   interest-rates/pages/TextView.aspx?data=yield
                    for US Treasury Bill historical rates.
 
         Returns:
@@ -219,7 +223,9 @@ class StockAnalyzer:
 
         Parameters:
             - r_f: The risk-free rate of return
-                   Consult https://www.treasury.gov/resource-center/data-chart-center/interest-rates/pages/TextView.aspx?data=yield
+                   Consult 
+                   https://www.treasury.gov/resource-center/data-chart-center/
+                   interest-rates/pages/TextView.aspx?data=yield
                    for US Treasury Bill historical rates.
 
         Returns:
@@ -235,7 +241,8 @@ class AssetGroupAnalyzer:
     @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df, group_by='name'):
         """
-        Create an `AssetGroupAnalyzer` object by passing in a `pandas.DataFrame`
+        Create an `AssetGroupAnalyzer` object by passing in 
+        a `pandas.DataFrame`
         and column to group by.
         """
         self.data = df
