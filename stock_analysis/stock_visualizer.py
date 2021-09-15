@@ -1,19 +1,15 @@
 """Visualize financial instruments."""
-
 import math
-
 import matplotlib.pyplot as plt
 import mplfinance as mpf
 import numpy as np
 import pandas as pd
 import seaborn as sns
-
 from .utils import validate_df
 
 
 class Visualizer:
     """Base visualizer class not intended for direct use."""
-
     @validate_df(columns={'open', 'high', 'low', 'close'})
     def __init__(self, df):
         """Visualizer has a `pandas.DataFrame` object as an attribute."""
@@ -176,7 +172,6 @@ class Visualizer:
 
 class StockVisualizer(Visualizer):
     """Visualizer for a single stock."""
-
     def evolution_over_time(self, column, **kwargs):
         """
         Visualize the evolution over time of a column.
@@ -254,15 +249,12 @@ class StockVisualizer(Visualizer):
             A matplotlib `Axes` object.
         """
         after_hours = self.data.open - self.data.close.shift()
-
         monthly_effect = after_hours.resample('1M').sum()
         fig, axes = plt.subplots(1, 2, figsize=(15, 3))
-
         after_hours.plot(
             ax=axes[0],
             title='After-hours trading\n(Open Price - Prior Day\'s Close)'
         ).set_ylabel('price')
-
         monthly_effect.index = monthly_effect.index.strftime('%Y-%b')
         monthly_effect.plot(
             ax=axes[1],
@@ -291,9 +283,7 @@ class StockVisualizer(Visualizer):
             A matplotlib `Axes` object.
         """
         is_higher = y2 - y1 > 0
-
         fig = plt.figure(figsize=figsize)
-
         for exclude_mask, color, label in zip(
             (is_higher, np.invert(is_higher)),
             ('g', 'r'),
@@ -305,10 +295,8 @@ class StockVisualizer(Visualizer):
             )
         plt.suptitle(title)
         plt.legend(bbox_to_anchor=(legend_x, -0.1), framealpha=0, ncol=2)
-
         for spine in ['top', 'right']:
             fig.axes[0].spines[spine].set_visible(False)
-
         return fig.axes[0]
 
     def open_to_close(self, figsize=(10, 4)):
@@ -408,6 +396,7 @@ class StockVisualizer(Visualizer):
             y=other[column],
             **kwargs
         )
+
     def correlation_heatmap(self, other):
         """
         Plot the correlations between this asset and
@@ -425,11 +414,9 @@ class StockVisualizer(Visualizer):
         matrix = np.zeros((size, size), float)
         for i, corr in zip(range(size), corrs):
             matrix[i][i] = corr
-
         # create mask to only show diagonal
         mask = np.ones_like(matrix)
         np.fill_diagonal(mask, 0)
-
         return sns.heatmap(
             matrix,
             annot=True,
@@ -579,17 +566,13 @@ class AssetGroupVisualizer(Visualizer):
             2,
             figsize=(15, 3 * num_categories)
         )
-
         for ax, (name, data) in zip(axes, self.data.groupby(self.group_by)):
             after_hours = data.open - data.close.shift()
-
             monthly_effect = after_hours.resample('1M').sum()
-
             after_hours.plot(
                 ax=ax[0],
                 title=f'{name} Open Price - Prior Day\'s Close'
             ).set_ylabel('price')
-
             monthly_effect.index = monthly_effect.index.strftime('%Y-%b')
             monthly_effect.plot(
                 ax=ax[1],
