@@ -45,8 +45,9 @@ class StockReader:
         """
         self.start, self.end = map(
             lambda x: \
-                x.strftime('%Y%m%d') if isinstance(x, dt.date)\
-                else re.sub(r'\D', '', x),
+                x.strftime('%Y%m%d') \
+                if isinstance(x, dt.date) else \
+                re.sub(r'\D', '', x),
             [start, end or dt.date.today()]
         )
         if self.start >= self.end:
@@ -90,7 +91,11 @@ class StockReader:
         Returns:
             A `pandas.DataFrame` object with the stock data.
         """
-        return web.get_data_yahoo(ticker, self.start, self.end)
+        return web.get_data_yahoo(
+            ticker, 
+            self.start, 
+            self.end
+        )
 
     def get_index_data(self, index):
         """
@@ -113,7 +118,8 @@ class StockReader:
                 'Index not supported. '
                 f"Available tickers are: {', '.join(self.available_tickers)}"
             )
-        return self.get_ticker_data(self.get_index_ticker(index))
+        indexTicker = self.get_index_ticker(index)
+        return self.get_ticker_data(indexTicker)
 
     def get_bitcoin_data(self, currency_code):
         """
@@ -126,7 +132,9 @@ class StockReader:
         Returns:
             A `pandas.DataFrame` object with the bitcoin data.
         """
-        return self.get_ticker_data(f'BTC-{currency_code}').loc[self.start:self.end]
+        return self\
+            .get_ticker_data(f'BTC-{currency_code}')\
+            .loc[self.start:self.end]
 
     def get_risk_free_rate_of_return(self, last=True):
         """
@@ -143,10 +151,18 @@ class StockReader:
             A single value or a `pandas.Series` object with 
             the risk-free rate(s) of return.
         """
-        data = web.DataReader('DGS10', 'fred', start=self.start, end=self.end)
+        data = web.DataReader(
+            'DGS10', 
+            'fred', 
+            start=self.start, 
+            end=self.end
+        )
         data.index.rename('date', inplace=True)
         data = data.squeeze()
-        return data.asof(self.end) if last and isinstance(data, pd.Series) else data
+        return \
+            data.asof(self.end) \
+            if last and isinstance(data, pd.Series) else \
+            data
 
     @label_sanitizer
     def get_forex_rates(self, from_currency, to_currency, **kwargs):
@@ -166,9 +182,14 @@ class StockReader:
         Returns:
             A `pandas.DataFrame` with daily exchange rates.
         """
-        data = web.DataReader(
-            f'{from_currency}/{to_currency}', 'av-forex-daily',
-            start=self.start, end=self.end, **kwargs
-        ).rename(pd.to_datetime)
+        data = web\
+            .DataReader(
+                f'{from_currency}/{to_currency}', 
+                'av-forex-daily',
+                start=self.start, 
+                end=self.end, 
+                **kwargs
+            )\
+            .rename(pd.to_datetime)
         data.index.rename('date', inplace=True)
         return data
