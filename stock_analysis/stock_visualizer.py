@@ -131,7 +131,7 @@ class Visualizer:
         """
         return self._window_calc(
             column, periods, name='MA',
-            func=pd.DataFrame.resample, named_arg='rule', **kwargs
+            func=pd.Series.resample, named_arg='rule', **kwargs
         )
 
     def exp_smoothing(self, column, periods, **kwargs):
@@ -149,7 +149,7 @@ class Visualizer:
         """
         return self._window_calc(
             column, periods, name='EWMA',
-            func=pd.DataFrame.ewm, named_arg='span', **kwargs
+            func=pd.Series.ewm, named_arg='span', **kwargs
         )
 
     # abstract methods for subclasses to define
