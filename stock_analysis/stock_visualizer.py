@@ -341,7 +341,7 @@ class StockVisualizer(Visualizer):
             A matplotlib `Axes` object.
         """
         ax = self.fill_between(
-            other_df.open, self.data.close, figsize=figsize, legend_x=0.7,
+            other_df.close, self.data.close, figsize=figsize, legend_x=0.7,
             title='Differential between asset closing price (this - other)',
             label_higher='asset is higher', label_lower='asset is lower'
         )
