@@ -24,7 +24,7 @@ bitcoin = reader.get_bitcoin_data('USD')
 
 # get faang data
 fb, aapl, amzn, nflx, goog = (
-    reader.get_ticker_data(ticker) \
+    reader.get_ticker_data(ticker)
     for ticker in ['META', 'AAPL', 'AMZN', 'NFLX', 'GOOG']
 )
 
