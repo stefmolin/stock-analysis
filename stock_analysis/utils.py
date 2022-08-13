@@ -96,13 +96,14 @@ def group_stocks(mapping):
     Returns:
         A new `pandas.DataFrame` object
     """
-    group_df = pd.DataFrame()
+    group_data = []
 
     for stock, stock_data in mapping.items():
         df = stock_data.copy(deep=True)
         df['name'] = stock
-        group_df = group_df.append(df, sort=True)
+        group_data.append(df)
 
+    group_df = pd.concat(group_data, sort=True)
     group_df.index = pd.to_datetime(group_df.index)
 
     return group_df
