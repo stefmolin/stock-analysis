@@ -25,7 +25,7 @@ bitcoin = reader.get_bitcoin_data('USD')
 # get faang data
 fb, aapl, amzn, nflx, goog = (
     reader.get_ticker_data(ticker) \
-    for ticker in ['FB', 'AAPL', 'AMZN', 'NFLX', 'GOOG']
+    for ticker in ['META', 'AAPL', 'AMZN', 'NFLX', 'GOOG']
 )
 
 # get S&P 500 data
@@ -133,7 +133,7 @@ Below are a few of the metrics you can calculate.
 ```python
 from stock_analysis import StockAnalyzer
 
-nflx_analyzer = stock_analysis.StockAnalyzer(nflx)
+nflx_analyzer = StockAnalyzer(nflx)
 nflx_analyzer.annualized_volatility()
 ```
 
@@ -145,7 +145,7 @@ from stock_analysis import AssetGroupAnalyzer
 faang_analyzer = AssetGroupAnalyzer(faang)
 faang_analyzer.analyze('annualized_volatility')
 
-faang_analyzer.analyze('beta')
+faang_analyzer.analyze('beta', index=sp)
 ```
 
 ### Modeling
@@ -165,7 +165,7 @@ plt.show()
 #### ARIMA
 Build the model:
 ```python
-arima_model = StockModeler.arima(nflx, 10, 1, 5)
+arima_model = StockModeler.arima(nflx, ar=10, i=1, ma=5)
 ```
 
 Check the residuals:
@@ -179,8 +179,9 @@ plt.show()
 Plot the predictions:
 ```python
 arima_ax = StockModeler.arima_predictions(
-    arima_model, start=start, end=end,
-    df=nflx, ax=axes[0], title='ARIMA'
+    nflx, arima_model,
+    start='2019-01-01', end='2019-01-07',
+    title='ARIMA'
 )
 plt.show()
 ```
@@ -204,8 +205,9 @@ plt.show()
 Plot the predictions:
 ```python
 linear_reg = StockModeler.regression_predictions(
-    lm, start=start, end=end,
-    df=nflx, ax=axes[1], title='Linear Regression'
+    nflx, lm,
+    start='2019-01-01', end='2019-01-07',
+    title='Linear Regression'
 )
 plt.show()
 ```
