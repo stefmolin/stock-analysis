@@ -5,6 +5,7 @@ import re
 
 import pandas as pd
 import pandas_datareader.data as web
+import yfinance as yf
 
 from .utils import label_sanitizer
 
@@ -94,8 +95,18 @@ class StockReader:
         Returns:
             A `pandas.DataFrame` object with the stock data.
         """
-        return web.get_data_yahoo(ticker, self.start, self.end)
-
+        try:
+            return web.get_data_yahoo(ticker, self.start, self.end)
+        except TypeError: # API issue upstream – switch to yfinance
+            # https://github.com/pydata/pandas-datareader/issues/952
+            start, end = (
+                dt.datetime.strptime(str_date, '%Y%m%d')
+                for str_date in (self.start, self.end)
+            )
+            return yf.download(
+                ticker, start, end + dt.timedelta(days=1),
+                progress=False, ignore_tz=True
+            )
 
     def get_index_data(self, index):
         """
