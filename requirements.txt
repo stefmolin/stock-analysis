@@ -5,3 +5,4 @@ pandas-datareader>=0.7.0
 seaborn>=0.11.0
 statsmodels>=0.11.1
 mplfinance>=0.12.7a4
+yfinance>=0.2.4
