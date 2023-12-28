@@ -1,13 +1,13 @@
 """Gather select stock data."""
 
-import datetime as dt
+import datetime as dt # standard library imports
 import re
 
 import pandas as pd
-import pandas_datareader.data as web
+import pandas_datareader.data as web # third party imports
 import yfinance as yf
 
-from .utils import label_sanitizer
+from .utils import label_sanitizer # local imports
 
 
 class StockReader:
@@ -160,7 +160,7 @@ class StockReader:
         """
         data = web.DataReader('DGS10', 'fred', start=self.start, end=self.end)
         data.index.rename('date', inplace=True)
-        data = data.squeeze()
+        data = data.squeeze() # if only one column, squeeze to a Series
         return data.asof(self.end) if last and isinstance(data, pd.Series) else data
 
 
